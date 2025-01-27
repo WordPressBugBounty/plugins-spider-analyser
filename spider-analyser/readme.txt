@@ -3,8 +3,8 @@ Contributors: wbolt,mrkwong
 Donate link: https://www.wbolt.com/
 Tags: Spider Analyser, SEO, Googlebot, MJ12bot, Spider, Baiduspider, SemrushBot, Bytespider, 360Spider
 Requires at least: 5.6
-Tested up to: 6.6
-Stable tag: 1.4.2
+Tested up to: 6.7
+Stable tag: 2.0.0
 License: GNU General Public License v3.0 or later
 Requires PHP: 7.0
 
@@ -259,6 +259,11 @@ Spider Analyser是一款专门为WordPress开发的<a href='https://www.wbolt.co
 6. Spider Analyser-插件设置界面截图.
 
 == Changelog ==
+
+= 2.0.0 =
+* 更直观和体验更佳的全新蜘蛛概况UI界面。
+* 全新卡片式蜘蛛清单界面。
+* 插件数据源在线蜘蛛查询工具全新版本迭代。
 
 = 1.4.2 =
 * 修复网站更换域名插件无法正常使用问题。

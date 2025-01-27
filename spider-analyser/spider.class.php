@@ -156,7 +156,6 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
         echo  '<div class="update-message notice inline notice-warning notice-alt"><p>' . esc_html($plugin_data['Name']) . '有新版本可用。';
         echo  '<a href="' . esc_url($update->url) . '" target="_blank" aria-label="查看' . esc_attr($plugin_data['Name']) . '版本' . esc_attr($update->new_version) . '详情">查看版本' . esc_html($update->new_version) . '详情</a>';
         echo  '或<a href="' . esc_url($update_url) . '" class="update-link" aria-label="现在更新 ' . esc_attr($plugin_data['Name']) . '">现在更新</a>。</p></div>';
-
     }
 
     public static function vue_assets()
@@ -191,10 +190,14 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
         if (!preg_match('#wp_spider_analyser#', $hook)) {
             return;
         }
+        add_filter('script_loader_tag', [__CLASS__, 'script_tag_handler'], 10, 3);
 
         wp_register_script('wbs-inline-js', false, null, false);
         wp_enqueue_script('wbs-inline-js');
 
+        $wb_ajax_nonce = wp_create_nonce('wp_ajax_wb_spider_analyser');
+
+        $options = self::cnf();
         $wb_cnf = array(
             'home_url' => home_url(),
             'base_url' => admin_url(),
@@ -208,85 +211,102 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                 'act' => 'spider_analyser',
                 'fetch' => 'get_setting',
                 'push' => 'set_setting'
-            )
+            ),
+            'wbp_security' => $wb_ajax_nonce,
+            'wb_spider_auto' => isset($options['auto_deny']) && $options['auto_deny'] == '1' ? '1' : '0'
         );
 
-        $options = self::cnf();
 
-        $wb_ajax_nonce = wp_create_nonce('wp_ajax_wb_spider_analyser');
 
-        $spider_auto = isset($options['auto_deny']) && $options['auto_deny'] ? 1 : 0;
-
-        $inline_script = 'var _wb_spider_analyser_ajax_nonce = "' . $wb_ajax_nonce . '",wb_spider_auto = ' . $spider_auto . ',
-		    wb_cnf=' . wp_json_encode($wb_cnf) . ';window.wb_vue_path="' . WP_SPIDER_ANALYSER_URL . 'tpl/";' . "\n";
+        $inline_script = 'var wbp_js_cnf=' . wp_json_encode($wb_cnf) . ';' . "\n";
 
         wp_add_inline_script('wbs-inline-js', $inline_script, 'before');
 
-        add_filter('style_loader_tag', function ($tag, $handle, $href, $media) {
-            if (!preg_match('#^vue-#', $media)) {
-                return $tag;
-            }
+        // add_filter('style_loader_tag', function ($tag, $handle, $href, $media) {
+        //     if (!preg_match('#^vue-#', $media)) {
+        //         return $tag;
+        //     }
 
-            $media = htmlspecialchars_decode($media);
-            $r = [];
-            parse_str(str_replace('vue-', '', $media), $r);
-            $rel = '';
-            $attr = [];
-            if ($r && is_array($r)) {
-                if (isset($r['rel'])) {
-                    $rel = $r['rel'];
-                    unset($r['rel']);
-                }
-                foreach ($r as $attr_k => $attr_v) {
-                    $attr[] = sprintf('%s="%s"', $attr_k, esc_attr($attr_v));
-                }
-            }
+        //     $media = htmlspecialchars_decode($media);
+        //     $r = [];
+        //     parse_str(str_replace('vue-', '', $media), $r);
+        //     $rel = '';
+        //     $attr = [];
+        //     if ($r && is_array($r)) {
+        //         if (isset($r['rel'])) {
+        //             $rel = $r['rel'];
+        //             unset($r['rel']);
+        //         }
+        //         foreach ($r as $attr_k => $attr_v) {
+        //             $attr[] = sprintf('%s="%s"', $attr_k, esc_attr($attr_v));
+        //         }
+        //     }
 
-            $tag = sprintf(
-                '<link href="%s" rel="%s" %s/>' . "\n",
-                $href,
-                $rel,
-                implode(" ", $attr)
-            );
+        //     $tag = sprintf(
+        //         '<link href="%s" rel="%s" %s/>' . "\n",
+        //         $href,
+        //         $rel,
+        //         implode(" ", $attr)
+        //     );
+        //     return $tag;
+        // }, 10, 4);
+        // add_filter('script_loader_tag', function ($tag, $handle, $src) {
+        //     if (!preg_match('#-vue-js-#', $handle)) {
+        //         return $tag;
+        //     }
+        //     $parts = explode('?', $src, 2);
+        //     $src = $parts[0];
+        //     $type = '';
+        //     $attr = '';
+        //     if (isset($parts[1])) {
+        //         $r = [];
+        //         parse_str(htmlspecialchars_decode($parts[1]), $r);
+        //         //print_r($r);
+        //         if ($r) {
+        //             if (isset($r['type'])) {
+        //                 $type = sprintf(' type="%s"', esc_attr($r['type']));
+        //                 unset($r['type']);
+        //             }
+        //             $attr_txt = '';
+        //             if (isset($r['attr'])) {
+        //                 $attr_txt = $r['attr'];
+        //                 unset($r['attr']);
+        //             }
+        //             foreach ($r as $k => $v) {
+        //                 $attr .= sprintf(' %s="%s"', $k, esc_attr($v));
+        //             }
+        //             if ($attr_txt) {
+        //                 $attr .= sprintf(' %s', esc_attr($attr_txt));
+        //             }
+        //         }
+        //     }
+        //     //print_r([$handle,$src]);
+
+        //     $tag = sprintf('<script%s src="%s"%s id="%s-js"></script>' . "\n", $type, $src, $attr, $handle);
+        //     return $tag;
+        // }, 10, 3);
+
+        // self::vue_assets();
+
+        echo WB_Vite::vite('src/main.js', WP_SPIDER_ANALYSER_PATH . '/assets/wbp/', WP_SPIDER_ANALYSER_URL . '/assets/wbp/');
+    }
+
+    /**
+     * js输出加type="module"
+     * 适用vite生成module js
+     *
+     * @param [type] $tag
+     * @param [type] $handle
+     * @param [type] $src
+     * @return string
+     */
+    public static function script_tag_handler($tag, $handle, $src)
+    {
+        if (preg_match("/wbs-/i", $handle)) {
+            return '<script type="module" src="' . esc_url($src) . '" defer></script>' . "\n";
+        } else {
             return $tag;
-        }, 10, 4);
-        add_filter('script_loader_tag', function ($tag, $handle, $src) {
-            if (!preg_match('#-vue-js-#', $handle)) {
-                return $tag;
-            }
-            $parts = explode('?', $src, 2);
-            $src = $parts[0];
-            $type = '';
-            $attr = '';
-            if (isset($parts[1])) {
-                $r = [];
-                parse_str(htmlspecialchars_decode($parts[1]), $r);
-                //print_r($r);
-                if ($r) {
-                    if (isset($r['type'])) {
-                        $type = sprintf(' type="%s"', esc_attr($r['type']));
-                        unset($r['type']);
-                    }
-                    $attr_txt = '';
-                    if (isset($r['attr'])) {
-                        $attr_txt = $r['attr'];
-                        unset($r['attr']);
-                    }
-                    foreach ($r as $k => $v) {
-                        $attr .= sprintf(' %s="%s"', $k, esc_attr($v));
-                    }
-                    if ($attr_txt) {
-                        $attr .= sprintf(' %s', esc_attr($attr_txt));
-                    }
-                }
-            }
-            //print_r([$handle,$src]);
-
-            $tag = sprintf('<script%s src="%s"%s id="%s-js"></script>' . "\n", $type, $src, $attr, $handle);
-            return $tag;
-        }, 10, 3);
-
-        self::vue_assets();
+        }
     }
 
 
@@ -694,6 +714,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
         return $query_vars;
     }
 
+
     public static function chart_data($day, $type, $compare = 0, $spider = null)
     {
         // global $wpdb;
@@ -731,11 +752,11 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
         $filed_more = '';
         $group_more = '';
         $where_more = '';
-        if ($type == 3) {
+        /*if ($type == 3) {
             $filed_more = ',code';
             $group_more = ',code';
             $where_more = ' AND code IN(200,301,302,404)';
-        }
+        }*/
 
         if ($spider) {
             $where_more = $db->prepare(" AND spider = %s", $spider);
@@ -748,12 +769,14 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
             if ($type == 2) {
                 $tmp[$r->ymd] = $r->num;
             } else if ($type == 3) {
+                $tmp[$r->ymd] = $r->spider > 0 ? ceil($r->num / $r->spider) : 0;
+
                 //$tmp[$r->ymd] = $r->spider > 0 ? ceil($r->num/$r->spider) : 0;
-                if (!isset($tmp[$r->ymd])) {
+                /*if (!isset($tmp[$r->ymd])) {
                     $tmp[$r->ymd] = [];
                 }
                 $code = in_array($r->code, ['301', '302']) ? '301/302' : $r->code;
-                $tmp[$r->ymd][$code] = isset($tmp[$r->ymd][$code]) ?  $tmp[$r->ymd][$code] + $r->num : $r->num;
+                $tmp[$r->ymd][$code] = isset($tmp[$r->ymd][$code]) ?  $tmp[$r->ymd][$code] + $r->num : $r->num;*/
             } else {
                 $tmp[$r->ymd] = $r->spider;
             }
@@ -762,25 +785,25 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
         $ydata = [];
         $codes = ['200', '301/302', '404'];
         $empty = 0;
-        if ($type == 3) {
+        /*if ($type == 3) {
             $empty = [];
             foreach ($codes as $c) {
                 $ydata[$c] = [];
                 $empty[$c] = 0;
             }
-        }
+        }*/
 
         foreach ($xdata as $v) {
-            if ($type == 3) {
+            /*if ($type == 3) {
                 $val = isset($tmp[$v]) ? $tmp[$v] : $empty;
                 foreach ($codes as $c) {
                     $ydata[$c][] = isset($val[$c]) ? $val[$c] : 0;
                 }
             } else {
                 $ydata[] = isset($tmp[$v]) ? $tmp[$v] : $empty;
-            }
+            }*/
+            $ydata[] = isset($tmp[$v]) ? $tmp[$v] : $empty;
         }
-
 
         return [$xdata, $ydata];
     }
@@ -802,31 +825,35 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
     public static function spider_analyser_ajax_save()
     {
         $op = sanitize_text_field(self::param('op'));
-        if(!$op){
-            $op = sanitize_text_field(self::param('op','','g'));
+        if (!$op) {
+            $op = sanitize_text_field(self::param('op', '', 'g'));
         }
-        if(!$op){
+        if (!$op) {
             return;
         }
         $arrow = [
-            'list', 'stop','clean_log', 'clean_all',
-            'verify', 'options', 'update_setting',
+            'list',
+            'stop',
+            'clean_log',
+            'clean_all',
+            'verify',
+            'options',
+            'update_setting',
         ];
-        if(!in_array($op, $arrow)){
+        if (!in_array($op, $arrow)) {
             return;
         }
-        if(!current_user_can('manage_options')){
+        if (!current_user_can('manage_options')) {
             self::ajax_resp(['code' => 1, 'desc' => 'deny']);
             return;
         }
 
         if (!wp_verify_nonce(sanitize_text_field(self::param('_ajax_nonce')), 'wp_ajax_wb_spider_analyser')) {
-            self::ajax_resp(['code'=>1,'desc'=>'illegal']);
+            self::ajax_resp(['code' => 1, 'desc' => 'illegal']);
             return;
         }
 
-        switch ($op)
-        {
+        switch ($op) {
             case 'list':
                 $ret = array('code' => 0, 'desc' => 'success');
                 do {
@@ -849,11 +876,10 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                     }
 
 
-                    //$spider_info = self::spider_info();
 
                     $db = self::db();
                     $q = self::param('q');
-                    if($q && is_array($q)){
+                    if ($q && is_array($q)) {
                         $q = self::array_sanitize_text_field($q);
                     }
 
@@ -880,17 +906,20 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                     if (!empty($q['code'])) {
                         $where[] = $db->prepare("a.code=%s", $q['code']);
                     }
+                    if (!empty($q['bot_type'])) {
+                        $where[] = $db->prepare("b.bot_type = %s", $q['bot_type']);
+                    }
                     if (!empty($q['spider'])) {
                         $where[] = $db->prepare("a.spider = %s", $q['spider']);
                     }
                     if (!empty($q['name'])) {
                         $where[] = $db->prepare("a.spider REGEXP %s", preg_quote($q['name']));
                     }
-                    $num = absint(self::param('post', 100));
+                    $num = absint(self::param('num', 30));
                     if (!$num) {
-                        $num = 100;
+                        $num = 30;
                     }
-                    $page = absint(self::param('page',1));
+                    $page = absint(self::param('page', 1));
                     if (!$page) {
                         $page = 1;
                     }
@@ -934,9 +963,17 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                     $sql = "SELECT a.spider,COUNT(1) num,MAX(a.visit_date) last_visit,b.bot_type,b.bot_url,b.status AS udg FROM $t a LEFT JOIN $t2 b ON a.spider=b.name WHERE $where GROUP BY a.spider ORDER BY $order_by ";
                     $list = $db->get_results($sql);
                     // $not_found = array();
+                    $bot_info = self::read_spider_info();
+
                     foreach ($list as $r) {
+                        $r->thumb = '';
+                        if ($bot_info && isset($bot_info[$r->spider])) {
+                            $r->thumb = $bot_info[$r->spider]['thumb'] ?? '';
+                        }
                         $r->rate = round($r->num / $total * 100, 2);
                     }
+                    /*$t2 = $db->prefix . 'wb_spider';
+                    $t = $db->prefix . 'wb_spider_log';*/
 
                     $ret = array(
                         //'sql'=>$sql,
@@ -968,7 +1005,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                         $cid = self::param('cid');
                         if ($cid && in_array($cid, [11, 12, 13, 14, 15, 16, 17])) {
                             $cid = intval($cid);
-                        }else{
+                        } else {
                             $cid = 4;
                         }
                         $db->suppress_errors();
@@ -1015,7 +1052,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                         break;
                     }
                     $remove = self::param('remove', null);
-                    if($remove && is_array($remove)) {
+                    if ($remove && is_array($remove)) {
 
                         $db = self::db();
                         $t = $db->prefix . 'wb_spider_ip';
@@ -1093,34 +1130,34 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                     }
 
                     $type = intval(self::param('type', 0));
-                    if($type){//['全部','名称','IP','IP段','名称及IP','自定义']
-                        if($type == 5){
+                    if ($type) { //['全部','名称','IP','IP段','名称及IP','自定义']
+                        if ($type == 5) {
                             $where .= $db->prepare(" AND `status`=%d", 15);
-                        }else if($type == 1){
+                        } else if ($type == 1) {
                             $where .= " AND `name` <> '' AND (`ip` = '' OR `ip` IS NULL)";
-                        }else if($type == 2){
+                        } else if ($type == 2) {
                             $where .= " AND `ip` <> '' AND (`name` = '' OR `name` IS NULL)";
-                        }else if($type == 3){
+                        } else if ($type == 3) {
                             $where .= " AND `ip` LIKE '*' AND (`name` = '' OR `name` IS NULL)";
-                        }else if($type == 4){
+                        } else if ($type == 4) {
                             $where .= " AND `ip` <> '' AND `name` <> ''";
                         }
                     }
-                    $path = intval(self::param('path',0));
-                    if($path){
+                    $path = intval(self::param('path', 0));
+                    if ($path) {
                         $where .= $db->prepare(" AND `status`=%d", $path);
                     }
 
                     $kw = sanitize_text_field(self::param('kw'));
-                    if($kw){
-                        $where .= $db->prepare(" AND (`name` LIKE %s OR `ip` LIKE %s)",'%'.$kw.'%', '%'.$kw.'%');
+                    if ($kw) {
+                        $where .= $db->prepare(" AND (`name` LIKE %s OR `ip` LIKE %s)", '%' . $kw . '%', '%' . $kw . '%');
                     }
 
                     $num = absint(self::param('num', 30));
                     if (!$num) {
                         $num = 30;
                     }
-                    $page = absint(self::param('page',1));
+                    $page = absint(self::param('page', 1));
                     if (!$page) {
                         $page = 1;
                     }
@@ -1183,7 +1220,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
 
                 break;
             case 'verify':
-                $ret = ['code'=>1,'desc'=>'fail'];
+                $ret = ['code' => 1, 'desc' => 'fail'];
                 $param = array(
                     'code' => sanitize_text_field(self::param('key')),
                     'host' => sanitize_text_field(self::param('host')),
@@ -1191,7 +1228,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                 );
                 $err = '';
                 do {
-                    if(empty($param['code']) || empty($param['host'])){
+                    if (empty($param['code']) || empty($param['host'])) {
                         $err = '不合法请求，参数无效';
                         break;
                     }
@@ -1258,7 +1295,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                     $ret['code'] = 0;
                     $ret['desc'] = 'success';
                 } while (false);
-                if($err){
+                if ($err) {
                     $ret['desc'] = $err;
                 }
                 self::ajax_resp($ret);
@@ -1279,24 +1316,37 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
         // global $wpdb;
 
         $op = sanitize_text_field(self::param('op'));
-        if(!$op){
-            $op = sanitize_text_field(self::param('op','','g'));
+        if (!$op) {
+            $op = sanitize_text_field(self::param('op', '', 'g'));
         }
 
-        if(!$op){
+        if (!$op) {
             return;
         }
         $arrow = [
-            'chk_ver', 'promote', 'chart_data',
-            'top_url', 'top_post', 'top_spider',
-            'summary', 'log', 'log_cnf', 'path_cnf',
-            'path', 'ip', 'post',
-            'get_setting', 'down_log', 'spider_history'
+            'chk_ver',
+            'promote',
+            'chart_data',
+            'top_url',
+            'top_post',
+            'top_spider',
+            'summary',
+            'code',
+            'log',
+            'log_cnf',
+            'stop_cnf',
+            'path_cnf',
+            'path',
+            'ip',
+            'post',
+            'get_setting',
+            'down_log',
+            'spider_history'
         ];
-        if(!in_array($op, $arrow)){
+        if (!in_array($op, $arrow)) {
             return;
         }
-        if(!current_user_can('manage_options')){
+        if (!current_user_can('manage_options')) {
             self::ajax_resp(['code' => 1, 'desc' => 'deny']);
             return;
         }
@@ -1400,11 +1450,11 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
 
                 $data = self::chart_data($day, $type, 0, $spider);
                 //$compare_day = $day>0?$day * 2 : 1;
-                $compare = [];
+                /*$compare = [];
                 if ($type != 3) {
-                    $compare = self::chart_data($day, $type, 1, $spider);
-                }
 
+                }*/
+                $compare = self::chart_data($day, $type, 1, $spider);
 
                 $ret = array(
                     //'sql'=>$sql,
@@ -1417,10 +1467,50 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
 
                 self::ajax_resp($ret);
                 break;
+            case 'code':
 
+                $spider = sanitize_text_field(self::param('spider'));
+                $day = absint(self::param('day', 0));
+                $cache_param = ['op' => 'code', 'day' => $day, 'spider' => $spider];
+                $cache_file = self::cache($cache_param);
+                if ($cache_file) {
+                    include $cache_file;
+                }
+
+                $db = self::db();
+                $time = strtotime(current_time('mysql'));
+                if ($day) {
+                    $time = $time - 86400 * $day;
+                }
+
+                $ymd = gmdate('Y-m-d', $time);
+                $t = $db->prefix . 'wb_spider_log';
+
+                if ($day > 2) {
+                    $op = '>=';
+                } else {
+                    $op = '=';
+                }
+                $where_more = '';
+                if ($spider) {
+                    $where_more = $db->prepare(" AND spider = %s", $spider);
+                }
+                $sql = "SELECT COUNT(1) num,code FROM $t WHERE DATE_FORMAT(visit_date,'%Y-%m-%d') $op '$ymd' $where_more GROUP BY code ORDER BY num DESC LIMIT 10";
+
+                $list = $db->get_results($sql);
+
+                $ret = array(
+                    'code' => 0,
+                    'data' => $list,
+                );
+
+                self::cache($cache_param, $ret, 3600); //60*60
+
+                self::ajax_resp($ret);
+                break;
             case 'top_url':
 
-                $day = absint(self::param('day',0));
+                $day = absint(self::param('day', 0));
                 $cache_param = ['op' => 'top_url', 'day' => $day];
                 $cache_file = self::cache($cache_param);
                 if ($cache_file) {
@@ -1465,7 +1555,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
 
             case 'top_spider':
 
-                $day = absint(self::param('day',0));
+                $day = absint(self::param('day', 0));
                 $cache_param = ['op' => 'top_spider', 'day' => $day];
                 $cache_file = self::cache($cache_param);
                 if ($cache_file) {
@@ -1519,38 +1609,66 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                 $ymd = current_time('Y-m-d');
                 $t = $db->prefix . 'wb_spider_log';
                 //蜘蛛数
-                $data = [['spider' => 0, 'url' => 0, 'avg_url' => 0], ['spider' => 0, 'url' => 0, 'avg_url' => 0], ['spider' => 0, 'url' => 0, 'avg_url' => 0]];
+                $data = [
+                    '0' => ['spider' => 0, 'url' => 0, 'avg_url' => 0],
+                    '1' => ['spider' => 0, 'url' => 0, 'avg_url' => 0],
+                    '7' => ['spider' => 0, 'url' => 0, 'avg_url' => 0],
+                    '30' => ['spider' => 0, 'url' => 0, 'avg_url' => 0]
+                ];
 
 
                 $row = $db->get_row("SELECT COUNT(1) url,COUNT(DISTINCT spider) spider FROM $t WHERE DATE_FORMAT(visit_date,'%Y-%m-%d')='$ymd' ");
 
                 if ($row) {
-                    $data[0]['spider'] = $row->spider;
-                    $data[0]['url'] = $row->url;
-                    $data[0]['avg_url'] = $row->spider > 0 ? ceil($row->url / $row->spider) : 0;
+                    $data['0']['spider'] = $row->spider;
+                    $data['0']['url'] = $row->url;
+                    $data['0']['avg_url'] = $row->spider > 0 ? ceil($row->url / $row->spider) : 0;
                 }
-                $ymd = gmdate('Y-m-d', strtotime(current_time('mysql')) - 86400);
 
-                $row = $db->get_row("SELECT COUNT(1) url,COUNT(DISTINCT spider) spider FROM $t WHERE DATE_FORMAT(visit_date,'%Y-%m-%d')='$ymd' ");
+                foreach($data as $k=>$r){
+                    if(!$k)continue;
+                    $day = intval($k);
+                    $ymd = gmdate('Y-m-d', strtotime(current_time('mysql')) - 86400 * $day);
+                    $op = '=';
+                    if($day>1){
+                        $op = '>=';
+                    }
+                    $row = $db->get_row("SELECT COUNT(1) url,COUNT(DISTINCT spider) spider FROM $t WHERE DATE_FORMAT(visit_date,'%Y-%m-%d') $op '$ymd' ");
 
+                    if ($row) {
+                        $data[$k]['spider'] = $row->spider;
+                        $data[$k]['url'] = $row->url;
+                        $data[$k]['avg_url'] = $row->spider > 0 ? ceil($row->url / $row->spider) : 0;
+                    }
+                }
+                /*
+
+
+
+
+                $ymd = gmdate('Y-m-d', strtotime(current_time('mysql')) - 86400 * 7);
+                $row = $db->get_row("SELECT COUNT(1) url FROM $t WHERE DATE_FORMAT(visit_date,'%Y-%m-%d')>='$ymd' ");
                 if ($row) {
-                    $data[1]['spider'] = $row->spider;
-                    $data[1]['url'] = $row->url;
-                    $data[1]['avg_url'] = $row->spider > 0 ? ceil($row->url / $row->spider) : 0;
+                    $data['7']['url'] = ceil($row->url / 7);
                 }
+                $row2 = $db->get_row("SELECT SUM(num) spider FROM (SELECT COUNT(DISTINCT  spider) num,DATE_FORMAT(visit_date,'%Y-%m-%d') ymd FROM $t WHERE DATE_FORMAT(visit_date,'%Y-%m-%d')>='$ymd' GROUP BY ymd) as tmp ");
+                if ($row2) {
+                    $data['7']['spider'] = ceil($row2->spider / 7);
+                }
+
+
 
                 $ymd = gmdate('Y-m-d', strtotime(current_time('mysql')) - 86400 * 30);
                 $row = $db->get_row("SELECT COUNT(1) url FROM $t WHERE DATE_FORMAT(visit_date,'%Y-%m-%d')>='$ymd' ");
                 if ($row) {
-                    $data[2]['url'] = ceil($row->url / 30);
+                    $data['30']['url'] = ceil($row->url / 30);
                 }
-                $row2 = $db->get_row("SELECT SUM(num) spider FROM (SELECT COUNT(DISTINCT  spider) num,DATE_FORMAT(visit_date,'%Y-%m-%d') ymd FROM $t WHERE DATE_FORMAT(visit_date,'%Y-%m-%d')>='$ymd' GROUP BY ymd) as tmp ");
-                if ($row2) {
-                    $data[2]['spider'] = ceil($row2->spider / 30);
-                }
-
-                $data[2]['avg_url'] = $data[2]['spider'] > 0 ? ceil($data[2]['url'] / $data[2]['spider']) : 0;
-
+                $row3 = $db->get_row("SELECT SUM(num) spider FROM (SELECT COUNT(DISTINCT  spider) num,DATE_FORMAT(visit_date,'%Y-%m-%d') ymd FROM $t WHERE DATE_FORMAT(visit_date,'%Y-%m-%d')>='$ymd' GROUP BY ymd) as tmp ");
+                if ($row3) {
+                    $data['30']['spider'] = ceil($row3->spider / 30);
+                }*/
+                //$data['7']['avg_url'] = $data[2]['spider'] > 0 ? ceil($data[2]['url'] / $data[2]['spider']) : 0;
+                //$data['30']['avg_url'] = $data[2]['spider'] > 0 ? ceil($data[2]['url'] / $data[2]['spider']) : 0;
 
 
                 $ret = array(
@@ -1607,7 +1725,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                 if (!$num) {
                     $num = 50;
                 }
-                $page = absint(self::param('page',1));
+                $page = absint(self::param('page', 1));
                 if (!$page) {
                     $page = 1;
                 }
@@ -1650,6 +1768,19 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                 }
 
                 $ret['data'] = self::spider_log();
+                self::cache($cache_param, $ret, 3600);
+
+                self::ajax_resp($ret);
+                break;
+
+            case 'stop_cnf':
+                $cache_param = ['stop_cnf'];
+                $cache_file = self::cache($cache_param);
+                if ($cache_file) {
+                    include $cache_file;
+                }
+
+                $ret['data'] = self::spider_list_stop();
                 self::cache($cache_param, $ret, 3600);
 
                 self::ajax_resp($ret);
@@ -1749,7 +1880,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                     if (!$num) {
                         $num = 50;
                     }
-                    $page = absint(self::param('page',1));
+                    $page = absint(self::param('page', 1));
                     if (!$page) {
                         $page = 1;
                     }
@@ -1838,7 +1969,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                     if (!$num) {
                         $num = 50;
                     }
-                    $page = absint(self::param('page',1));
+                    $page = absint(self::param('page', 1));
                     if (!$page) {
                         $page = 1;
                     }
@@ -1946,7 +2077,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                     if (!$num) {
                         $num = 50;
                     }
-                    $page = absint(self::param('page',1));
+                    $page = absint(self::param('page', 1));
                     if (!$page) {
                         $page = 1;
                     }
@@ -1988,7 +2119,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                     $total = $db->get_var("SELECT FOUND_ROWS()");
                     foreach ($list as $k => $r) {
                         $list[$k]->post_url = get_permalink($r->post_id);
-                        $list[$k]->post_edit_url = get_edit_post_link($r->post_id,'url');
+                        $list[$k]->post_edit_url = get_edit_post_link($r->post_id, 'url');
                     }
 
 
@@ -2011,7 +2142,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
 
             case 'get_setting':
 
-                $ret = array('code' => 0, 'desc' => 'success','data'=>[]);
+                $ret = array('code' => 0, 'desc' => 'success', 'data' => []);
                 $ret['data'] = WP_Spider_Analyser_Admin::wp_spider_analyser_conf();
 
                 self::ajax_resp($ret);
@@ -2052,7 +2183,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                 break;
             case 'spider_history':
                 $ret = array('code' => 0, 'desc' => 'success');
-                $post_id = absint(self::param('post_id',0));
+                $post_id = absint(self::param('post_id', 0));
                 $list = array();
                 do {
                     if (!$post_id) {
@@ -2180,7 +2311,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
 
     public static function log2db($type, $force = 0)
     {
-        self::txt_log('log2db '.$type,'定时任务');
+        self::txt_log('log2db ' . $type, '定时任务');
         if ($type == 'db') {
             return;
         }
@@ -2203,7 +2334,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                 self::read_txt($txt);
             }
         }
-        self::txt_log('log2db end','定时任务');
+        self::txt_log('log2db end', '定时任务');
     }
 
     public static function read_txt($file)
@@ -2232,7 +2363,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
 
     public static function set_auto_deny()
     {
-        self::txt_log('set_auto_deny start ','定时任务');
+        self::txt_log('set_auto_deny start ', '定时任务');
         // global $wpdb;
         $cnf = self::cnf();
         if (empty($cnf['auto_deny'])) {
@@ -2242,12 +2373,12 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
 
         $t = $db->prefix . 'wb_spider_ip';
         $db->query("UPDATE $t SET status=16 WHERE status = 2");
-        self::txt_log('set_auto_deny end ','定时任务');
+        self::txt_log('set_auto_deny end ', '定时任务');
     }
 
     public static function check_ip()
     {
-        self::txt_log('check_ip start ','定时任务');
+        self::txt_log('check_ip start ', '定时任务');
 
         // global $wpdb;
 
@@ -2281,7 +2412,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
             return;
         }
         $code = wp_remote_retrieve_response_code($http);
-        if($code !== 200){
+        if ($code !== 200) {
             return;
         }
         self::txt_log($body);
@@ -2293,13 +2424,13 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                 }
             }
         }
-        self::txt_log('check_ip end ','定时任务');
+        self::txt_log('check_ip end ', '定时任务');
     }
 
     public static function update_post_url_num()
     {
         // global $wpdb;
-        self::txt_log('update_post_url_num start ','定时任务');
+        self::txt_log('update_post_url_num start ', '定时任务');
         $db = self::db();
 
         $prefix = $db->prefix;
@@ -2315,12 +2446,12 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
         $sql .= " SET a.url_in = b.num  WHERE a.url_md5=b.link_url_md5";
 
         $db->query($sql);
-        self::txt_log('update_post_url_num end ','定时任务');
+        self::txt_log('update_post_url_num end ', '定时任务');
     }
 
     public static function scan_post_inner_link()
     {
-        self::txt_log('scan_post_inner_link start ','定时任务');
+        self::txt_log('scan_post_inner_link start ', '定时任务');
         // global $wpdb;
         $db = self::db();
         $error = $db->suppress_errors();
@@ -2332,7 +2463,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
             self::post_inner_link($r);
         }
         $db->suppress_errors($error);
-        self::txt_log('scan_post_inner_link end ','定时任务');
+        self::txt_log('scan_post_inner_link end ', '定时任务');
     }
 
     public static function post_inner_link($post)
@@ -2402,7 +2533,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
 
     public static function cron_set_spider_post()
     {
-        self::txt_log('cron_set_spider_post start ','定时任务');
+        self::txt_log('cron_set_spider_post start ', '定时任务');
         // global $wpdb;
         $db = self::db();
         $error = $db->suppress_errors();
@@ -2426,13 +2557,13 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
         $db->query("UPDATE $t a ,$db->postmeta b SET a.status=b.meta_value WHERE a.post_id=b.post_id AND b.meta_key='url_in_baidu'");
 
         $db->suppress_errors($error);
-        self::txt_log('cron_set_spider_post end ','定时任务');
+        self::txt_log('cron_set_spider_post end ', '定时任务');
     }
 
     public static function set_url_type()
     {
         // global $wpdb;
-        self::txt_log('set_url_type start ','定时任务');
+        self::txt_log('set_url_type start ', '定时任务');
         $db = self::db();
         $t = $db->prefix . 'wb_spider_log';
 
@@ -2448,12 +2579,12 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                 $db->query($db->prepare("UPDATE $t SET url_type=%s WHERE url_md5=%s", $type, $r->url_md5));
             }
         }
-        self::txt_log('set_url_type start ','定时任务');
+        self::txt_log('set_url_type start ', '定时任务');
     }
 
     public static function check_404()
     {
-        self::txt_log('check_404 start','定时任务');
+        self::txt_log('check_404 start', '定时任务');
         // global $wpdb;
         $db = self::db();
         $max_id = get_option('sp_an_max_id', 0);
@@ -2472,13 +2603,13 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
             }
         }
         update_option('sp_an_max_id', $max_id, false);
-        self::txt_log('check_404 end','定时任务');
+        self::txt_log('check_404 end', '定时任务');
     }
 
     public static function del_old_log()
     {
         // global $wpdb;
-        self::txt_log('del_old_log start ','定时任务');
+        self::txt_log('del_old_log start ', '定时任务');
         $cnf = self::cnf();
         $month = intval($cnf['log_keep']);
         if (!$month) {
@@ -2505,7 +2636,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
 
         $db->query("DELETE FROM $t WHERE DATE_FORMAT(visit_date,'%Y-%m-%d') < '$ymd' ");
 
-        self::txt_log('del_old_log end ','定时任务');
+        self::txt_log('del_old_log end ', '定时任务');
     }
 
     public static function calc_all_log()
@@ -2527,7 +2658,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
     public static function calc_log($ymd = null)
     {
 
-        self::txt_log('calc_log start '.$ymd,'定时任务');
+        self::txt_log('calc_log start ' . $ymd, '定时任务');
 
         //global $wpdb;
 
@@ -2541,7 +2672,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
         }
 
         $num = $db->get_var("SELECT COUNT(1) AS num FROM $t_log a WHERE NOT EXISTS(SELECT id FROM $t b WHERE a.spider=b.name)");
-        if($num > 0){
+        if ($num > 0) {
             //new spider
             $db->query("INSERT INTO $t(name) SELECT DISTINCT spider FROM $t_log a WHERE NOT EXISTS(SELECT id FROM $t b WHERE a.spider=b.name)");
         }
@@ -2574,7 +2705,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
             $db->insert($t_sum, $d);
         }
 
-        self::txt_log('calc_log end ','定时任务');
+        self::txt_log('calc_log end ', '定时任务');
 
         return;
 
@@ -2925,7 +3056,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
         $t_log = $t . '_log';
 
         $num = $db->get_var("SELECT COUNT(1) AS num FROM $t_log a WHERE NOT EXISTS(SELECT id FROM $t b WHERE a.spider=b.name)");
-        if($num > 0){
+        if ($num > 0) {
             $db->query("INSERT INTO $t(name) SELECT DISTINCT spider FROM $t_log a WHERE NOT EXISTS(SELECT id FROM $t b WHERE a.spider=b.name)");
         }
 
@@ -2933,12 +3064,12 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
         $time = get_option('sync_wb_spider', 0);
 
         if (time() > $time) {
-            update_option('sync_wb_spider', time() + 3600);
+            update_option('sync_wb_spider', time() + 86400);
             self::sync_wb_spider();
         }
 
 
-        echo '<div class="wbs-wrap" id="optionsframework-wrap"><div id="app"></div></div>';
+        echo '<div id="app"></div>';
     }
 
 
@@ -2990,10 +3121,13 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
         // global $wpdb;
         $db = self::db();
         $t = $db->prefix . 'wb_spider_log';
+        $t_s = $db->prefix . 'wb_spider';
         $spider = $db->get_col("SELECT DISTINCT spider FROM $t");
         $code = $db->get_col("SELECT DISTINCT code FROM $t");
+        $type = $db->get_col("SELECT DISTINCT bot_type FROM $t_s WHERE bot_type <> ''");
         $res['spider'] = $spider;
         $res['code'] = $code;
+        $res['type'] = $type;
 
         $res['day'] = array(
             array(
@@ -3013,6 +3147,36 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                 'label' => '近30天'
             )
         );
+
+        return $res;
+    }
+
+    /**
+     * 列表筛选选项
+     *
+     */
+    public static function spider_list_stop()
+    {
+        $res = array();
+
+        $res['type'] = [
+            '全部',
+            '名称',
+            'IP',
+            'IP段',
+            '名称及IP',
+            '自定义'
+        ];
+        $res['path'] = [
+            '4' => '未知',
+            '11' => '蜘蛛日志',
+            '12' => '蜘蛛清单',
+            '13' => '蜘蛛IP段',
+            '14' => '疑似伪蜘蛛',
+            '15' => '自定义',
+            '16' => '智能拦截',
+            '17' => '记录管理'
+        ];
 
         return $res;
     }
@@ -3046,10 +3210,10 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
 
         $api = 'https://www.wbolt.com/wb-api/v1/spider/info';
         $param = [
-            'timeout' => 5,
+            'timeout' => 30,
             'sslverify' => false,
             'headers' => array('referer' => home_url()),
-            'body' => ['udg' => 1]
+            'body' => ['udg' => 1, 'logo' => 1]
         ];
         $http = wp_remote_get($api, $param);
         do {
@@ -3068,6 +3232,8 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                 break;
             }
 
+            self::save_spider_info($data['data']);
+
             $t = $db->prefix . 'wb_spider';
             $db->query("UPDATE $t set `status` = 1 WHERE `status` = 2");
             foreach ($data['data'] as $r) {
@@ -3079,65 +3245,53 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
         } while (0);
     }
 
-    public static function spider_info()
+    public static function read_spider_info()
     {
-        // global $wpdb;
+        static $data = null;
 
-        $time = current_time('U', 1);
-        $info = get_option('wb_spider_info', array());
-
-        if ($info && isset($info['expired']) &&  $info['expired'] > $time && isset($info['data'])) {
-            return $info['data'];
-        }
-        $spider_data = array();
-        if ($info && $info['data']) {
-            $spider_data = $info['data'];
+        if ($data !== null) {
+            return $data;
         }
 
-        $info = array('expired' => $time + 1 * HOUR_IN_SECONDS, 'data' => array());
-        $api = 'https://www.wbolt.com/wb-api/v1/spider/info';
-        $http = wp_remote_get($api, array('sslverify' => false, 'headers' => array('referer' => home_url()),));
+        $cache = [];
         do {
-            if (is_wp_error($http)) {
-                break;
-            }
-            $body = wp_remote_retrieve_body($http);
-            if (!$body) {
-                break;
-            }
-            $data = json_decode($body, true);
-            if (!$data) {
-                break;
-            }
-            if (!is_array($data)) {
-                break;
-            }
-            $db = self::db();
-            $t = $db->prefix . 'wb_spider_log';
-            $spider = $db->get_col("SELECT DISTINCT spider FROM $t WHERE 1");
-            //$spider_data = array();
-            foreach ($data['data'] as $k => $r) {
-                if (isset($spider_data[$k])) {
-                    $old = $spider_data[$k];
-                    if (!$old['bot_type'] && $r['bot_type'] && $r['bot_type'] != '未分类') {
-                        $old['bot_type'] = $r['bot_type'];
-                    }
-                    if (!$old['bot_url'] && $r['bot_url']) {
-                        $old['bot_url'] = $r['bot_url'];
-                    }
-                    $spider_data[$k] = $old;
-                    continue;
+            $file = __DIR__ . '/#info/spider_info.php';
+            if (file_exists($file)) {
+                $cache = include $file;
+                if (!empty($cache) && is_array($cache)) {
+                    break;
                 }
-                if (!$r['bot_type']) continue;
-                if (!in_array($k, $spider)) continue;
-                $spider_data[$k] = $r;
             }
-            $info['data'] = $spider_data;
+            $file = __DIR__ . '/spider_info.php';
+            if (file_exists($file)) {
+                $cache = include $file;
+                if (!empty($cache) && is_array($cache)) {
+                    break;
+                }
+            }
         } while (0);
-        update_option('wb_spider_info', $info, false);
-        return $info['data'];
+        $list = [];
+        if ($cache) {
+            foreach ($cache as $r) {
+                $list[$r['name']] = $r;
+            }
+        }
+        $data = $list;
+        return $data;
     }
 
+    public static function save_spider_info($data)
+    {
+        if (empty($data) || !is_array($data)) {
+            return;
+        }
+        if (!is_dir(__DIR__ . '/#info/')) {
+            mkdir(__DIR__ . '/#info/', 0755);
+        }
+
+        $content = '<' . '?php' . "\n" . 'return ' . var_export($data, true) . ';';
+        file_put_contents(__DIR__ . '/#info/spider_info.php', $content);
+    }
 
     public static function db_ver()
     {

@@ -6,22 +6,23 @@ if (!defined('ABSPATH')) {
 
 class WP_Spider_Analyser_Base
 {
-    public static function param($key, $default = '', $type = 'p'){
-        if('p' === $type){
-            if(isset($_POST[$key])){
+    public static function param($key, $default = '', $type = 'p')
+    {
+        if ('p' === $type) {
+            if (isset($_POST[$key])) {
                 return $_POST[$key];
             }
             return $default;
-        } else if ('g' === $type){
-            if(isset($_GET[$key])){
+        } else if ('g' === $type) {
+            if (isset($_GET[$key])) {
                 return $_GET[$key];
             }
             return $default;
         }
-        if(isset($_POST[$key])){
+        if (isset($_POST[$key])) {
             return $_POST[$key];
         }
-        if(isset($_GET[$key])){
+        if (isset($_GET[$key])) {
             return $_GET[$key];
         }
         return $default;
@@ -33,11 +34,11 @@ class WP_Spider_Analyser_Base
     public static function db()
     {
         static $db = null;
-        if($db){
+        if ($db) {
             return $db;
         }
         $db = $GLOBALS['wpdb'];
-        if($db instanceof wpdb){
+        if ($db instanceof wpdb) {
             return $db;
         }
         return $db;
@@ -104,7 +105,7 @@ class WP_Spider_Analyser_Admin extends WP_Spider_Analyser_Base
         // global $wpdb;
 
         $def = array(
-            'log_keep' => 2,
+            'log_keep' => '2',
             'auto_deny' => 0,
             'user_define' => array(),
             'user_rule' => array(),
@@ -129,9 +130,7 @@ class WP_Spider_Analyser_Admin extends WP_Spider_Analyser_Base
 
         //,'spider'=>array()
 
-        /*if(!isset($cnf['spider'])){
-            $cnf['spider'] = array_values(WP_Spider_Analyser::spider_info());
-        }*/
+
         return $cnf;
     }
 
@@ -175,9 +174,9 @@ class WP_Spider_Analyser_Admin extends WP_Spider_Analyser_Base
                         $cnf['extral_rule'] = $extral_rule;
                     }
                     $user_rule = self::array_sanitize_text_field(self::param('user_rule', []));
-                    if($user_rule && is_array($user_rule)){
+                    if ($user_rule && is_array($user_rule)) {
                         $cnf['user_rule'] = $user_rule;
-                    }else{
+                    } else {
                         $cnf['user_rule'] =  [];
                     }
                     update_option(self::$option, $cnf);
@@ -185,9 +184,9 @@ class WP_Spider_Analyser_Admin extends WP_Spider_Analyser_Base
                 case 'log':
                     $cnf = self::cnf();
                     $opt = self::param('opt', []);
-                    if($opt && is_array($opt)){
+                    if ($opt && is_array($opt)) {
                         $old_log_update = $cnf['log_update'];
-                        if(!isset($opt['user_define'])){
+                        if (!isset($opt['user_define'])) {
                             $opt['user_define'] = [];
                         }
                         foreach (['user_define', 'log_keep', 'log_update'] as $f) {
@@ -212,7 +211,7 @@ class WP_Spider_Analyser_Admin extends WP_Spider_Analyser_Base
                         $t = $db->prefix . 'wb_spider_ip';
                         if ($stop) {
                             $db->query($db->prepare("DELETE FROM $t WHERE id=%d", $stop));
-                        } else if($name) {
+                        } else if ($name) {
                             $db->insert($t, ['name' => $name, 'ip' => '', 'status' => 17]);
                             return $db->insert_id;
                         }
@@ -233,11 +232,11 @@ class WP_Spider_Analyser_Admin extends WP_Spider_Analyser_Base
 
                     break;
                 case 'reset':
-                    $w_key = implode('_',['wb','spider','analyser','']);
-                    $id = get_option($w_key.'ver', 0);
-                    if($id){
-                        update_option($w_key.'ver',0);
-                        update_option($w_key.'cnf_' . $id, '');
+                    $w_key = implode('_', ['wb', 'spider', 'analyser', '']);
+                    $id = get_option($w_key . 'ver', 0);
+                    if ($id) {
+                        update_option($w_key . 'ver', 0);
+                        update_option($w_key . 'cnf_' . $id, '');
                     }
                     break;
             }
@@ -311,7 +310,7 @@ class WP_Spider_Analyser_Admin extends WP_Spider_Analyser_Base
 
         $data = [];
         $tab = sanitize_text_field(self::param('tab'));
-        if(!$tab){
+        if (!$tab) {
             return $data;
         }
 
