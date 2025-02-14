@@ -952,16 +952,20 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                     $sort_order = sanitize_text_field(self::param('order'));
                     $order_by .=  $sort_order == 'asc' ? ' ASC' : ' DESC';
 
-                    $cache_param = ['list', $where, $order_by, $total_where];
+                    $cache_param = ['list', $where, $order_by, $total_where, $offset];
                     $cache_file = self::cache($cache_param);
                     if ($cache_file) {
                         include $cache_file;
                     }
 
-                    $total = $db->get_var("SELECT COUNT(1) total FROM $t WHERE $total_where");
+                    //$total = $db->get_var("SELECT COUNT(1) total FROM $t WHERE $total_where");
 
-                    $sql = "SELECT a.spider,COUNT(1) num,MAX(a.visit_date) last_visit,b.bot_type,b.bot_url,b.status AS udg FROM $t a LEFT JOIN $t2 b ON a.spider=b.name WHERE $where GROUP BY a.spider ORDER BY $order_by ";
-                    $list = $db->get_results($sql);
+                    $sql = "SELECT SQL_CALC_FOUND_ROWS a.spider,COUNT(1) num,MAX(a.visit_date) last_visit,b.bot_type,b.bot_url,b.status AS udg FROM $t a LEFT JOIN $t2 b ON a.spider=b.name WHERE $where GROUP BY a.spider ORDER BY $order_by ";
+                    //$list = $db->get_results($sql);
+                    $list = $db->get_results($sql." LIMIT $offset,$num");
+
+                    $total = $db->get_var("SELECT FOUND_ROWS()");
+
                     // $not_found = array();
                     $bot_info = self::read_spider_info();
 
@@ -978,7 +982,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                     $ret = array(
                         //'sql'=>$sql,
                         'num' => $num,
-                        'total' => count($list),
+                        'total' => $total,
                         'code' => 0,
                         'data' => $list,
                     );
@@ -2184,6 +2188,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
             case 'spider_history':
                 $ret = array('code' => 0, 'desc' => 'success');
                 $post_id = absint(self::param('post_id', 0));
+                $day = intval(self::param('day', -1));
                 $list = array();
                 do {
                     if (!$post_id) {
@@ -2193,16 +2198,33 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                     $url = str_replace(home_url(), '', $url);
                     $url_md5 = md5($url);
                     $limit = '';
-                    $cache_param = ['spider_history', $url_md5, $limit];
+                    $cache_param = ['spider_history', $url_md5, $limit, $day];
                     $cache_file = self::cache($cache_param);
                     if ($cache_file) {
                         include $cache_file;
                     }
-
                     $db = self::db();
-                    $sql = "SELECT `spider`, `visit_date`, `visit_ip` FROM `{$db->prefix}wb_spider_log` WHERE `url_md5`=%s  ORDER BY visit_date DESC $limit";
 
-                    $ret['data'] = $db->get_results($db->prepare($sql, $url_md5));
+                    $sql = "SELECT `spider`, `visit_date`, `visit_ip` FROM `{$db->prefix}wb_spider_log` WHERE `url_md5`=%s ";
+                    $sql = $db->prepare($sql, $url_md5);
+
+                    if ($day > -1) {
+                        $time = strtotime(current_time('mysql'));
+                        if ($day) {
+                            $time = $time - 86400 * $day;
+                        }
+                        $ymd = gmdate('Y-m-d', $time);
+
+                        $op = '=';
+                        if ($day > 1) {
+                            $op = '>=';
+                        }
+
+                        $sql .= " AND DATE_FORMAT(visit_date,'%Y-%m-%d') $op '$ymd'";
+                    }
+
+
+                    $ret['data'] = $db->get_results($sql." ORDER BY visit_date DESC $limit");
                     self::cache($cache_param, $ret, 3600);
                 } while (0);
 
