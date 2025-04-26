@@ -1,18 +1,18 @@
 === Spider Analyser - WordPress搜索引擎蜘蛛分析插件 ===
 Contributors: wbolt,mrkwong
 Donate link: https://www.wbolt.com/
-Tags: Spider Analyser, SEO, Googlebot, MJ12bot, Spider, Baiduspider, SemrushBot, Bytespider, 360Spider
+Tags: Googlebot, Spider, Baiduspider, Bingbot, Crawler
 Requires at least: 5.6
-Tested up to: 6.7
-Stable tag: 2.0.1
+Tested up to: 6.8
+Stable tag: 2.1.0
 License: GNU General Public License v3.0 or later
 Requires PHP: 7.0
 
-Spider Analyser是一款用于跟踪WordPress网站各种搜索引擎蜘蛛爬行日志，并进行详细的蜘蛛爬行数据统计、蜘蛛行为分析、蜘蛛爬取分析及伪蜘蛛拦截等。
+Spider Analyser是一款用于跟踪WordPress网站各种搜索引擎蜘蛛爬行日志的插件，并进行详细的蜘蛛爬行数据统计、蜘蛛行为分析、蜘蛛爬取分析及伪蜘蛛拦截等。
 
 == Description ==
 
-Spider Analyser是一款用于跟踪WordPress网站各种搜索引擎蜘蛛爬行日志，并进行详细的蜘蛛爬行数据统计、蜘蛛行为分析、蜘蛛爬取分析及伪蜘蛛拦截等。
+Spider Analyser是一款用于跟踪WordPress网站各种搜索引擎蜘蛛爬行日志的插件，并进行详细的蜘蛛爬行数据统计、蜘蛛行为分析、蜘蛛爬取分析及伪蜘蛛拦截等。
 
 > <strong>Spider Analyser Pro</strong>
 >
@@ -170,23 +170,23 @@ Spider Analyser是一款专门为WordPress开发的<a href='https://www.wbolt.co
 
 由于我们是WordPress重度爱好者，在WordPress主题插件开发之余，我们还独立开发了一系列的在线工具及分享大量的WordPress教程，供国内的WordPress粉丝和站长使用和学习，其中包括：
 
-**<a href="https://www.wbolt.com/learn?utm_source=wp&utm_medium=link&utm_campaign=spider-analyser" target="_blank">1. Wordpress学院:</a>** 这里将整合全面的WordPress知识和教程，帮助您深入了解WordPress的方方面面，包括基础、开发、优化、电商及SEO等。WordPress大师之路，从这里开始。
+**1. <a href="https://www.wbolt.com/learn?utm_source=wp&utm_medium=link&utm_campaign=spider-analyser" target="_blank">Wordpress学院</a>:** 这里将整合全面的WordPress知识和教程，帮助您深入了解WordPress的方方面面，包括基础、开发、优化、电商及SEO等。WordPress大师之路，从这里开始。
 
-**<a href="https://www.wbolt.com/tools/keyword-finder?utm_source=wp&utm_medium=link&utm_campaign=spider-analyser" target="_blank">2. 关键词查找工具:</a>** 选择符合搜索用户需求的关键词进行内容编辑，更有机会获得更好的搜索引擎排名及自然流量。使用我们的关键词查找工具，以获取主流搜索引擎推荐关键词。
+**2. <a href="https://www.wbolt.com/tools/keyword-finder?utm_source=wp&utm_medium=link&utm_campaign=spider-analyser" target="_blank">关键词查找工具</a>:** 选择符合搜索用户需求的关键词进行内容编辑，更有机会获得更好的搜索引擎排名及自然流量。使用我们的关键词查找工具，以获取主流搜索引擎推荐关键词。
 
-**<a href="https://www.wbolt.com/tools/wp-fixer?utm_source=wp&utm_medium=link&utm_campaign=spider-analyser">3. WOrdPress错误查找:</a>** 我们搜集了大部分WordPress最为常见的错误及对应的解决方案。您只需要在下方输入所遭遇的错误关键词或错误码，即可找到对应的处理办法。
+**3. <a href="https://www.wbolt.com/tools/wp-fixer?utm_source=wp&utm_medium=link&utm_campaign=spider-analyser">WordPress错误查找</a>:** 我们搜集了大部分WordPress最为常见的错误及对应的解决方案。您只需要在下方输入所遭遇的错误关键词或错误码，即可找到对应的处理办法。
 
-**<a href="https://www.wbolt.com/tools/seo-toolbox?utm_source=wp&utm_medium=link&utm_campaign=spider-analyser">4. SEO工具箱:</a>** 收集整理国内外诸如链接建设、关键词研究、内容优化等不同类型的SEO工具。善用工具，往往可以达到事半功倍的效果。
+**4. <a href="https://www.wbolt.com/tools/seo-toolbox?utm_source=wp&utm_medium=link&utm_campaign=spider-analyser">SEO工具箱</a>:** 收集整理国内外诸如链接建设、关键词研究、内容优化等不同类型的SEO工具。善用工具，往往可以达到事半功倍的效果。
 
-**<a href="https://www.wbolt.com/tools/seo-topic?utm_source=wp&utm_medium=link&utm_campaign=spider-analyser">5. SEO优化中心:</a>** 无论您是 SEO 初学者，还是想学习高级SEO 策略，这都是您的 SEO 知识中心。
+**5. <a href="https://www.wbolt.com/tools/seo-topic?utm_source=wp&utm_medium=link&utm_campaign=spider-analyser">SEO优化中心</a>:** 无论您是 SEO 初学者，还是想学习高级SEO 策略，这都是您的 SEO 知识中心。
 
-**<a href="https://www.wbolt.com/tools/spider-tool?utm_source=wp&utm_medium=link&utm_campaign=spider-analyser">6. 蜘蛛查询工具:</a>** 网站每日都可能会有大量的蜘蛛爬虫访问，或者搜索引擎爬虫，或者安全扫描，或者SEO检测……满目琳琅。借助我们的蜘蛛爬虫检测工具，让一切假蜘蛛爬虫无处遁形！
+**6. <a href="https://www.wbolt.com/tools/spider-tool?utm_source=wp&utm_medium=link&utm_campaign=spider-analyser">蜘蛛查询工具</a>:** 网站每日都可能会有大量的蜘蛛爬虫访问，或者搜索引擎爬虫，或者安全扫描，或者SEO检测……满目琳琅。借助我们的蜘蛛爬虫检测工具，让一切假蜘蛛爬虫无处遁形！
 
-**<a href="https://www.wbolt.com/tools/wp-codex?utm_source=wp&utm_medium=link&utm_campaign=spider-analyser">7. WP开发宝典:</a>** WordPress作为全球市场份额最大CMS，也为众多企业官网、个人博客及电商网站的首选。使用我们的开发宝典，快速了解其函数、过滤器及动作等作用和写法。
+**7. <a href="https://www.wbolt.com/tools/wp-codex?utm_source=wp&utm_medium=link&utm_campaign=spider-analyser">WP开发宝典</a>:** WordPress作为全球市场份额最大CMS，也为众多企业官网、个人博客及电商网站的首选。使用我们的开发宝典，快速了解其函数、过滤器及动作等作用和写法。
 
-**<a href="https://www.wbolt.com/tools/robots-tester?utm_source=wp&utm_medium=link&utm_campaign=spider-analyser">8. robots.txt测试工具:</a>** 标准规范的robots.txt能够正确指引搜索引擎蜘蛛爬取网站内容。反之，可能让蜘蛛晕头转向。借助我们的robots.txt检测工具，校正您所写的规则。
+**8. <a href="https://www.wbolt.com/tools/robots-tester?utm_source=wp&utm_medium=link&utm_campaign=spider-analyser">robots.txt测试工具</a>:** 标准规范的robots.txt能够正确指引搜索引擎蜘蛛爬取网站内容。反之，可能让蜘蛛晕头转向。借助我们的robots.txt检测工具，校正您所写的规则。
 
-**<a href="https://www.wbolt.com/tools/theme-detector?utm_source=wp&utm_medium=link&utm_campaign=spider-analyser">9. WordPress主题检测器:</a>** 有时候，看到一个您为之着迷的WordPress网站。甚是想知道它背后的主题。查看源代码定可以找到蛛丝马迹，又或者使用我们的小工具，一键查明。
+**9. <a href="https://www.wbolt.com/tools/theme-detector?utm_source=wp&utm_medium=link&utm_campaign=spider-analyser">WordPress主题检测器</a>:** 有时候，看到一个您为之着迷的WordPress网站。甚是想知道它背后的主题。查看源代码定可以找到蛛丝马迹，又或者使用我们的小工具，一键查明。
 
 == Installation ==
 
@@ -259,6 +259,11 @@ Spider Analyser是一款专门为WordPress开发的<a href='https://www.wbolt.co
 6. Spider Analyser-插件设置界面截图.
 
 == Changelog ==
+
+= 2.1.0 =
+* 新增pot文件以实现本地化，并预翻译繁体中文和英文；
+* 修正升级提醒相关。
+* 设置蜘蛛默认图片。
 
 = 2.0.1 =
 * 解决部分服务器开启防盗链导致后台界面问题。
