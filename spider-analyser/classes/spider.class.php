@@ -21,7 +21,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
 
         add_action('parse_request', array(__CLASS__, 'parse_request'), 1);
 
-        add_action('admin_menu', array(__CLASS__, 'adminMenu'));
+        add_action('admin_menu', array(__CLASS__, 'admin_menu_handler'));
         add_action('edit_post', array(__CLASS__, 'spider_edit_post'), 500, 2);
         add_filter('plugin_action_links', array(__CLASS__, 'actionLinks'), 10, 2);
         register_shutdown_function(array(__CLASS__, 'handle'));
@@ -985,8 +985,9 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
 
                     foreach ($list as $r) {
                         $r->thumb = '';
-                        if ($bot_info && isset($bot_info[$r->spider])) {
-                            $r->thumb = $bot_info[$r->spider]['thumb'] ?? '';
+                        $bot_key = strtolower($r->spider);
+                        if ($bot_info && isset($bot_info[$bot_key])) {
+                            $r->thumb = $bot_info[$bot_key]['thumb'] ?? '';
                         }
                         if (!$r->thumb) {
                             $r->thumb = 'https://static.wbolt.com/wp-content/uploads/2025/02/unknown-bot.svg';
@@ -3054,10 +3055,10 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
         }
     }
 
-    public static function adminMenu()
+    public static function admin_menu_handler()
     {
-        global $wb_settings_page_hook_theme, $submenu;
-        $wb_settings_page_hook_theme = add_menu_page(
+        global $submenu;
+        add_menu_page(
             _x('蜘蛛分析', '菜单名称', WB_SPA_DM),
             _x('蜘蛛分析', '菜单名称', WB_SPA_DM),
             'administrator',
@@ -3065,7 +3066,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
             array(__CLASS__, 'spider_views'), //
             WP_SPIDER_ANALYSER_URL . 'assets/ico.svg'
         );
-        $submenu = [
+        $submenu_spa = [
             [
                 'name' => _x('蜘蛛概况', '菜单名称', WB_SPA_DM),
                 'slug' => 'wp_spider_analyser#/home'
@@ -3091,7 +3092,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                 'slug' => 'wp_spider_analyser#/setting'
             ]
         ];
-        foreach ($submenu as $item) {
+        foreach ($submenu_spa as $item) {
             add_submenu_page('wp_spider_analyser', $item['name'], $item['name'], 'administrator', $item['slug'], array(__CLASS__, 'spider_views'));
         }
 
@@ -3363,7 +3364,8 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
         $list = [];
         if ($cache) {
             foreach ($cache as $r) {
-                $list[$r['name']] = $r;
+                $key = strtolower($r['name']);
+                $list[$key] = $r;
             }
         }
         $data = $list;
