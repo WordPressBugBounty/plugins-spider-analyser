@@ -4,7 +4,7 @@ Donate link: https://www.wbolt.com/
 Tags: Googlebot, Spider, Baiduspider, Bingbot, Crawler
 Requires at least: 5.6
 Tested up to: 6.8
-Stable tag: 2.1.0
+Stable tag: 2.1.1
 License: GNU General Public License v3.0 or later
 Requires PHP: 7.0
 
@@ -259,6 +259,9 @@ Spider Analyser是一款专门为WordPress开发的<a href='https://www.wbolt.co
 6. Spider Analyser-插件设置界面截图.
 
 == Changelog ==
+
+= 2.1.1 =
+* 修复激活异常bug。
 
 = 2.1.0 =
 * 新增pot文件以实现本地化，并预翻译繁体中文和英文；
