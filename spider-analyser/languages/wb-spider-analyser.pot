@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-04-23 10:12+0000\n"
+"POT-Creation-Date: 2025-06-07 09:03+0000\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -144,225 +144,241 @@ msgctxt "btn"
 msgid "反馈"
 msgstr ""
 
-#: classes/spider.class.php:157
+#: classes/spider.class.php:30, classes/spider.class.php:31
+msgid "Spider Analyser"
+msgstr ""
+
+#: classes/spider.class.php:32, classes/spider.class.php:33
+msgid "闪电博"
+msgstr ""
+
+#: classes/spider.class.php:34
+msgid "Spider Analyser是一款用于跟踪WordPress网站各种搜索引擎蜘蛛爬行日志的插件，并进行详细的蜘蛛爬行数据统计、蜘蛛行为分析、蜘蛛爬取分析及伪蜘蛛拦截等。"
+msgstr ""
+
+#: classes/spider.class.php:35
+msgid "https://www.wbolt.com/"
+msgstr ""
+
+#: classes/spider.class.php:177
 msgid "有新版本可用。"
 msgstr ""
 
-#: classes/spider.class.php:158
+#: classes/spider.class.php:178
 msgctxt "%s产品名"
 msgid "查看 %s 版本"
 msgstr ""
 
-#: classes/spider.class.php:158
+#: classes/spider.class.php:178
 msgid "查看版本 %s 详情"
 msgstr ""
 
-#: classes/spider.class.php:159
+#: classes/spider.class.php:179
 msgctxt "or"
 msgid "或"
 msgstr ""
 
-#: classes/spider.class.php:159
+#: classes/spider.class.php:179
 msgctxt "%s产品名"
 msgid "现在更新%s"
 msgstr ""
 
-#: classes/spider.class.php:159
+#: classes/spider.class.php:179
 msgctxt "link"
 msgid "现在更新"
 msgstr ""
 
-#: classes/spider.class.php:216
+#: classes/spider.class.php:231
 msgctxt "产品名"
 msgid "Spider Analyser-蜘蛛分析插件"
 msgstr ""
 
-#: classes/spider.class.php:1254
+#: classes/spider.class.php:1202
 msgctxt "ajax返回提示"
 msgid "不合法请求，参数无效"
 msgstr ""
 
-#: classes/spider.class.php:1260, classes/spider.class.php:1265
+#: classes/spider.class.php:1208, classes/spider.class.php:1213
 msgctxt "ajax返回提示"
 msgid "校验失败，请稍后再试（错误代码001）"
 msgstr ""
 
-#: classes/spider.class.php:1272
+#: classes/spider.class.php:1220
 msgctxt "ajax返回提示"
 msgid "发生异常错误，联系技术支持（错误代码 010）"
 msgstr ""
 
-#: classes/spider.class.php:1279
+#: classes/spider.class.php:1227
 msgctxt "ajax返回提示"
 msgid "发生异常错误，联系技术支持（错误代码011）"
 msgstr ""
 
-#: classes/spider.class.php:1283
+#: classes/spider.class.php:1231
 msgctxt "ajax返回提示"
 msgid "校验失败，请稍后再试（错误代码004)"
 msgstr ""
 
-#: classes/spider.class.php:1293
+#: classes/spider.class.php:1241
 msgctxt "ajax返回提示"
 msgid "插件配置参数错误，联系技术支持，错误代码："
 msgstr ""
 
-#: classes/spider.class.php:1296
+#: classes/spider.class.php:1244
 msgctxt "ajax返回提示"
 msgid "输入key无效，请输入正确key（错误代码200）"
 msgstr ""
 
-#: classes/spider.class.php:1299
+#: classes/spider.class.php:1247
 msgctxt "ajax返回提示"
 msgid "key使用次数超出限制范围（错误代码201）"
 msgstr ""
 
-#: classes/spider.class.php:1304
+#: classes/spider.class.php:1252
 msgctxt "ajax返回提示"
 msgid "校验服务器异常，联系技术支持，错误代码："
 msgstr ""
 
-#: classes/spider.class.php:1307
+#: classes/spider.class.php:1255
 msgctxt "ajax返回提示"
 msgid "发生异常错误，联系技术支持，错误代码："
 msgstr ""
 
-#: classes/spider.class.php:3061, classes/spider.class.php:3062
+#: classes/spider.class.php:3019, classes/spider.class.php:3020
 msgctxt "菜单名称"
 msgid "蜘蛛分析"
 msgstr ""
 
-#: classes/spider.class.php:3070
+#: classes/spider.class.php:3028
 msgctxt "菜单名称"
 msgid "蜘蛛概况"
 msgstr ""
 
-#: classes/spider.class.php:3074
+#: classes/spider.class.php:3032
 msgctxt "菜单名称"
 msgid "蜘蛛日志"
 msgstr ""
 
-#: classes/spider.class.php:3078
+#: classes/spider.class.php:3036
 msgctxt "菜单名称"
 msgid "蜘蛛列表"
 msgstr ""
 
-#: classes/spider.class.php:3082
+#: classes/spider.class.php:3040
 msgctxt "菜单名称"
 msgid "访问路径"
 msgstr ""
 
-#: classes/spider.class.php:3086
+#: classes/spider.class.php:3044
 msgctxt "菜单名称"
 msgid "文章爬取"
 msgstr ""
 
-#: classes/spider.class.php:3090
+#: classes/spider.class.php:3048
 msgctxt "菜单名称"
 msgid "插件设置"
 msgstr ""
 
-#: classes/spider.class.php:3099, classes/spider.class.php:3099
+#: classes/spider.class.php:3057, classes/spider.class.php:3057
 msgctxt "菜单名称"
 msgid "升至Pro版"
 msgstr ""
 
-#: classes/spider.class.php:3113
+#: classes/spider.class.php:3071
 msgctxt "link"
 msgid "升至Pro版"
 msgstr ""
 
-#: classes/spider.class.php:3116
+#: classes/spider.class.php:3074
 msgctxt "link"
 msgid "设置"
 msgstr ""
 
-#: classes/spider.class.php:3189, classes/spider.class.php:3225
+#: classes/spider.class.php:3147, classes/spider.class.php:3183
 msgctxt "筛选选项"
 msgid "所有时间"
 msgstr ""
 
-#: classes/spider.class.php:3193, classes/spider.class.php:3229
+#: classes/spider.class.php:3151, classes/spider.class.php:3187
 msgctxt "筛选选项"
 msgid "今天"
 msgstr ""
 
-#: classes/spider.class.php:3197, classes/spider.class.php:3233
+#: classes/spider.class.php:3155, classes/spider.class.php:3191
 msgctxt "筛选选项"
 msgid "近7天"
 msgstr ""
 
-#: classes/spider.class.php:3201, classes/spider.class.php:3237
+#: classes/spider.class.php:3159, classes/spider.class.php:3195
 msgctxt "筛选选项"
 msgid "近30天"
 msgstr ""
 
-#: classes/spider.class.php:3253
+#: classes/spider.class.php:3211
 msgctxt "spider type"
 msgid "全部"
 msgstr ""
 
-#: classes/spider.class.php:3254
+#: classes/spider.class.php:3212
 msgctxt "spider type"
 msgid "名称"
 msgstr ""
 
-#: classes/spider.class.php:3255
+#: classes/spider.class.php:3213
 msgctxt "spider type"
 msgid "IP"
 msgstr ""
 
-#: classes/spider.class.php:3256
+#: classes/spider.class.php:3214
 msgctxt "spider type"
 msgid "IP段"
 msgstr ""
 
-#: classes/spider.class.php:3257
+#: classes/spider.class.php:3215
 msgctxt "spider type"
 msgid "名称及IP"
 msgstr ""
 
-#: classes/spider.class.php:3258
+#: classes/spider.class.php:3216
 msgctxt "spider type"
 msgid "自定义"
 msgstr ""
 
-#: classes/spider.class.php:3261
+#: classes/spider.class.php:3219
 msgctxt "spider path"
 msgid "未知"
 msgstr ""
 
-#: classes/spider.class.php:3262
+#: classes/spider.class.php:3220
 msgctxt "spider path"
 msgid "蜘蛛日志"
 msgstr ""
 
-#: classes/spider.class.php:3263
+#: classes/spider.class.php:3221
 msgctxt "spider path"
 msgid "蜘蛛清单"
 msgstr ""
 
-#: classes/spider.class.php:3264
+#: classes/spider.class.php:3222
 msgctxt "spider path"
 msgid "蜘蛛IP段"
 msgstr ""
 
-#: classes/spider.class.php:3265
+#: classes/spider.class.php:3223
 msgctxt "spider path"
 msgid "疑似伪蜘蛛"
 msgstr ""
 
-#: classes/spider.class.php:3266
+#: classes/spider.class.php:3224
 msgctxt "spider path"
 msgid "自定义"
 msgstr ""
 
-#: classes/spider.class.php:3267
+#: classes/spider.class.php:3225
 msgctxt "spider path"
 msgid "智能拦截"
 msgstr ""
 
-#: classes/spider.class.php:3268
+#: classes/spider.class.php:3226
 msgctxt "spider path"
 msgid "记录管理"
 msgstr ""
@@ -1615,16 +1631,4 @@ msgstr ""
 #: classes/_localize.php:256
 msgctxt "vue部分"
 msgid "绑定域名后将不可更改，确认绑定到域名：%s"
-msgstr ""
-
-#: Plugin Name
-msgid "Spider Analyser"
-msgstr ""
-
-#: Description
-msgid "Spider Analyser是一款用于跟踪WordPress网站各种搜索引擎蜘蛛爬行日志，并进行详细的蜘蛛爬行数据统计、蜘蛛行为分析、蜘蛛爬取分析及伪蜘蛛拦截等。"
-msgstr ""
-
-#: Author
-msgid "闪电博"
 msgstr ""

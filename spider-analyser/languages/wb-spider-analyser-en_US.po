@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 2.1.0\n"
-"POT-Creation-Date: 2025-04-23 10:12+0000\n"
+"POT-Creation-Date: 2025-06-07 09:03+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -13,8 +13,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Basepath: ..\n"
-"X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;"
-"esc_html_x:1,2c\n"
+"X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;"
+"_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;"
+"esc_html_e;esc_html_x:1,2c\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 3.4.4\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -150,225 +151,250 @@ msgctxt "btn"
 msgid "反馈"
 msgstr "Feedback"
 
-#: classes/spider.class.php:157
+#: classes/spider.class.php:30, classes/spider.class.php:31
+msgid "Spider Analyser"
+msgstr "Spider Analyser"
+
+#: classes/spider.class.php:32, classes/spider.class.php:33
+msgid "闪电博"
+msgstr "WBOLT"
+
+#: classes/spider.class.php:34
+msgid ""
+"Spider Analyser是一款用于跟踪WordPress网站各种搜索引擎蜘蛛爬行日志的插件，并"
+"进行详细的蜘蛛爬行数据统计、蜘蛛行为分析、蜘蛛爬取分析及伪蜘蛛拦截等。"
+msgstr ""
+"Spider Analyser is a WordPress plugin for tracking various search engine "
+"spider crawl logs, and detailed spider crawl data statistics, spider "
+"behavior analysis, spider crawl analysis and false spider block."
+
+#: classes/spider.class.php:35
+msgid "https://www.wbolt.com/"
+msgstr "https://www.wbolt.com/"
+
+#: classes/spider.class.php:177
 msgid "有新版本可用。"
 msgstr "The current %s is available."
 
-#: classes/spider.class.php:158
+#: classes/spider.class.php:178
 msgctxt "%s产品名"
 msgid "查看 %s 版本"
 msgstr "View %s version"
 
-#: classes/spider.class.php:158
+#: classes/spider.class.php:178
 msgid "查看版本 %s 详情"
 msgstr "View version %s details"
 
-#: classes/spider.class.php:159
+#: classes/spider.class.php:179
 msgctxt "or"
 msgid "或"
 msgstr "or"
 
-#: classes/spider.class.php:159
+#: classes/spider.class.php:179
 msgctxt "%s产品名"
 msgid "现在更新%s"
 msgstr "Update %s now"
 
-#: classes/spider.class.php:159
+#: classes/spider.class.php:179
 msgctxt "link"
 msgid "现在更新"
 msgstr "Update now"
 
-#: classes/spider.class.php:216
+#: classes/spider.class.php:231
 msgctxt "产品名"
 msgid "Spider Analyser-蜘蛛分析插件"
 msgstr "Spider Analyser - Spider Analysis Plugin"
 
-#: classes/spider.class.php:1254
+#: classes/spider.class.php:1202
 msgctxt "ajax返回提示"
 msgid "不合法请求，参数无效"
 msgstr "Illegal request, invalid parameters"
 
-#: classes/spider.class.php:1260, classes/spider.class.php:1265
+#: classes/spider.class.php:1208, classes/spider.class.php:1213
 msgctxt "ajax返回提示"
 msgid "校验失败，请稍后再试（错误代码001）"
 msgstr "Verification failed, please try again later (Error code 001)"
 
-#: classes/spider.class.php:1272
+#: classes/spider.class.php:1220
 msgctxt "ajax返回提示"
 msgid "发生异常错误，联系技术支持（错误代码 010）"
-msgstr "An exception error occurred, contact technical support (Error code 010)"
+msgstr ""
+"An exception error occurred, contact technical support (Error code 010)"
 
-#: classes/spider.class.php:1279
+#: classes/spider.class.php:1227
 msgctxt "ajax返回提示"
 msgid "发生异常错误，联系技术支持（错误代码011）"
-msgstr "An exception error occurred, contact technical support (Error code 011)"
+msgstr ""
+"An exception error occurred, contact technical support (Error code 011)"
 
-#: classes/spider.class.php:1283
+#: classes/spider.class.php:1231
 msgctxt "ajax返回提示"
 msgid "校验失败，请稍后再试（错误代码004)"
 msgstr "Verification failed, please try again later (Error code 004)"
 
-#: classes/spider.class.php:1293
+#: classes/spider.class.php:1241
 msgctxt "ajax返回提示"
 msgid "插件配置参数错误，联系技术支持，错误代码："
-msgstr "Plugin configuration parameters are incorrect, contact technical support, error code:"
+msgstr ""
+"Plugin configuration parameters are incorrect, contact technical support, "
+"error code:"
 
-#: classes/spider.class.php:1296
+#: classes/spider.class.php:1244
 msgctxt "ajax返回提示"
 msgid "输入key无效，请输入正确key（错误代码200）"
 msgstr "The key is invalid. Please enter the correct key (Error code 200)"
 
-#: classes/spider.class.php:1299
+#: classes/spider.class.php:1247
 msgctxt "ajax返回提示"
 msgid "key使用次数超出限制范围（错误代码201）"
 msgstr "The number of key usage exceeds the limit range (Error 201)"
 
-#: classes/spider.class.php:1304
+#: classes/spider.class.php:1252
 msgctxt "ajax返回提示"
 msgid "校验服务器异常，联系技术支持，错误代码："
 msgstr "Verify server exception, contact technical support, error code:"
 
-#: classes/spider.class.php:1307
+#: classes/spider.class.php:1255
 msgctxt "ajax返回提示"
 msgid "发生异常错误，联系技术支持，错误代码："
 msgstr "An exception error occurred, contact technical support, error code:"
 
-#: classes/spider.class.php:3061, classes/spider.class.php:3062
+#: classes/spider.class.php:3019, classes/spider.class.php:3020
 msgctxt "菜单名称"
 msgid "蜘蛛分析"
 msgstr "Spider Analyser"
 
-#: classes/spider.class.php:3070
+#: classes/spider.class.php:3028
 msgctxt "菜单名称"
 msgid "蜘蛛概况"
 msgstr "Overview"
 
-#: classes/spider.class.php:3074
+#: classes/spider.class.php:3032
 msgctxt "菜单名称"
 msgid "蜘蛛日志"
 msgstr "Log"
 
-#: classes/spider.class.php:3078
+#: classes/spider.class.php:3036
 msgctxt "菜单名称"
 msgid "蜘蛛列表"
 msgstr "Spiders"
 
-#: classes/spider.class.php:3082
+#: classes/spider.class.php:3040
 msgctxt "菜单名称"
 msgid "访问路径"
 msgstr "Paths"
 
-#: classes/spider.class.php:3086
+#: classes/spider.class.php:3044
 msgctxt "菜单名称"
 msgid "文章爬取"
 msgstr "Posts"
 
-#: classes/spider.class.php:3090
+#: classes/spider.class.php:3048
 msgctxt "菜单名称"
 msgid "插件设置"
 msgstr "Settings"
 
-#: classes/spider.class.php:3099, classes/spider.class.php:3099
+#: classes/spider.class.php:3057, classes/spider.class.php:3057
 msgctxt "菜单名称"
 msgid "升至Pro版"
 msgstr "Upgrade"
 
-#: classes/spider.class.php:3113
+#: classes/spider.class.php:3071
 msgctxt "link"
 msgid "升至Pro版"
 msgstr "Upgrade"
 
-#: classes/spider.class.php:3116
+#: classes/spider.class.php:3074
 msgctxt "link"
 msgid "设置"
 msgstr "Setting"
 
-#: classes/spider.class.php:3189, classes/spider.class.php:3225
+#: classes/spider.class.php:3147, classes/spider.class.php:3183
 msgctxt "筛选选项"
 msgid "所有时间"
 msgstr "All times"
 
-#: classes/spider.class.php:3193, classes/spider.class.php:3229
+#: classes/spider.class.php:3151, classes/spider.class.php:3187
 msgctxt "筛选选项"
 msgid "今天"
 msgstr "Today"
 
-#: classes/spider.class.php:3197, classes/spider.class.php:3233
+#: classes/spider.class.php:3155, classes/spider.class.php:3191
 msgctxt "筛选选项"
 msgid "近7天"
 msgstr "Last 7 days"
 
-#: classes/spider.class.php:3201, classes/spider.class.php:3237
+#: classes/spider.class.php:3159, classes/spider.class.php:3195
 msgctxt "筛选选项"
 msgid "近30天"
 msgstr "Last 30 days"
 
-#: classes/spider.class.php:3253
+#: classes/spider.class.php:3211
 msgctxt "spider type"
 msgid "全部"
 msgstr "All"
 
-#: classes/spider.class.php:3254
+#: classes/spider.class.php:3212
 msgctxt "spider type"
 msgid "名称"
 msgstr "Name"
 
-#: classes/spider.class.php:3255
+#: classes/spider.class.php:3213
 msgctxt "spider type"
 msgid "IP"
 msgstr "IP"
 
-#: classes/spider.class.php:3256
+#: classes/spider.class.php:3214
 msgctxt "spider type"
 msgid "IP段"
 msgstr "IP segment"
 
-#: classes/spider.class.php:3257
+#: classes/spider.class.php:3215
 msgctxt "spider type"
 msgid "名称及IP"
 msgstr "Name & IP"
 
-#: classes/spider.class.php:3258
+#: classes/spider.class.php:3216
 msgctxt "spider type"
 msgid "自定义"
 msgstr "Customize"
 
-#: classes/spider.class.php:3261
+#: classes/spider.class.php:3219
 msgctxt "spider path"
 msgid "未知"
 msgstr "Unknown"
 
-#: classes/spider.class.php:3262
+#: classes/spider.class.php:3220
 msgctxt "spider path"
 msgid "蜘蛛日志"
 msgstr "Log"
 
-#: classes/spider.class.php:3263
+#: classes/spider.class.php:3221
 msgctxt "spider path"
 msgid "蜘蛛清单"
 msgstr "Spider list"
 
-#: classes/spider.class.php:3264
+#: classes/spider.class.php:3222
 msgctxt "spider path"
 msgid "蜘蛛IP段"
 msgstr "Spider IP segment"
 
-#: classes/spider.class.php:3265
+#: classes/spider.class.php:3223
 msgctxt "spider path"
 msgid "疑似伪蜘蛛"
 msgstr "False Spiders"
 
-#: classes/spider.class.php:3266
+#: classes/spider.class.php:3224
 msgctxt "spider path"
 msgid "自定义"
 msgstr "Customize"
 
-#: classes/spider.class.php:3267
+#: classes/spider.class.php:3225
 msgctxt "spider path"
 msgid "智能拦截"
 msgstr "Auto-block"
 
-#: classes/spider.class.php:3268
+#: classes/spider.class.php:3226
 msgctxt "spider path"
 msgid "记录管理"
 msgstr "Record Management"
@@ -386,7 +412,9 @@ msgstr "No project selected"
 #: classes/_localize.php:9
 msgctxt "vue部分"
 msgid "批量忽略所选蜘蛛，将不再记录此蜘蛛日志。可通过插件设置恢复统计。"
-msgstr "Batch ignoring selected spiders will no longer record this spider log. Statistics can be restored via plugin settings."
+msgstr ""
+"Batch ignoring selected spiders will no longer record this spider log. "
+"Statistics can be restored via plugin settings."
 
 #: classes/_localize.php:10
 msgctxt "vue部分"
@@ -416,7 +444,8 @@ msgstr "Cancel"
 #: classes/_localize.php:15
 msgctxt "vue部分"
 msgid "批量拦截所选蜘蛛IP？可通过蜘蛛拦截列表移除。"
-msgstr "Bulk block selected spider IP? Can be removed via the spider block list."
+msgstr ""
+"Bulk block selected spider IP? Can be removed via the spider block list."
 
 #: classes/_localize.php:16
 msgctxt "vue部分"
@@ -506,7 +535,9 @@ msgstr "Apply"
 #: classes/_localize.php:33
 msgctxt "vue部分"
 msgid "拦截IP段为%s的蜘蛛？可通过蜘蛛拦截列表移除。"
-msgstr "Block spiders with IP segments of %s? Can be removed via the spider block list."
+msgstr ""
+"Block spiders with IP segments of %s? Can be removed via the spider block "
+"list."
 
 #: classes/_localize.php:34
 msgctxt "vue部分"
@@ -541,7 +572,9 @@ msgstr "Learn more"
 #: classes/_localize.php:40
 msgctxt "vue部分"
 msgid "将%s蜘蛛列为忽略列表，将不再记录此蜘蛛日志。可通过插件设置恢复统计。"
-msgstr "Listing %s spider as an ignore list will no longer record this spider log. Statistics can be restored via plugin settings."
+msgstr ""
+"Listing %s spider as an ignore list will no longer record this spider log. "
+"Statistics can be restored via plugin settings."
 
 #: classes/_localize.php:41
 msgctxt "vue部分"
@@ -580,8 +613,11 @@ msgstr "Cleared successfully"
 
 #: classes/_localize.php:48
 msgctxt "vue部分"
-msgid "在开启智能拦截前，请确保网站未启用全站CDN（如cloudflare），以免误判拦截。"
-msgstr "Before auto-block, please make sure that the website does not enable the site-wide CDN (such as cloudflare) to no misjudgment block."
+msgid ""
+"在开启智能拦截前，请确保网站未启用全站CDN（如cloudflare），以免误判拦截。"
+msgstr ""
+"Before auto-block, please make sure that the website does not enable the "
+"site-wide CDN (such as cloudflare) to no misjudgment block."
 
 #: classes/_localize.php:49
 msgctxt "vue部分"
@@ -686,12 +722,16 @@ msgstr "Remove"
 #: classes/_localize.php:69
 msgctxt "vue部分"
 msgid "开启智能拦截，会自动将疑似伪蜘蛛添加到蜘蛛拦截清单。请慎重启用该功能！"
-msgstr "Enable auto-block and will automatically add false spiders to the spider block list. Please restart carefully use this function!"
+msgstr ""
+"Enable auto-block and will automatically add false spiders to the spider "
+"block list. Please restart carefully use this function!"
 
 #: classes/_localize.php:70
 msgctxt "vue部分"
 msgid "已启用智能拦截功能，当前列表不记录伪蜘蛛数据。"
-msgstr "The auto-block function is enabled, and the current list does not record false spider data."
+msgstr ""
+"The auto-block function is enabled, and the current list does not record "
+"false spider data."
 
 #: classes/_localize.php:71
 msgctxt "vue部分"
@@ -846,7 +886,9 @@ msgstr "Index Status"
 #: classes/_localize.php:101
 msgctxt "vue部分"
 msgid "收录状态由搜索推送插件引入，以源数据为准。"
-msgstr "The inclusion status is introduced by the search push plug-in, based on the source data."
+msgstr ""
+"The inclusion status is introduced by the search push plug-in, based on the "
+"source data."
 
 #: classes/_localize.php:102
 msgctxt "vue部分"
@@ -855,10 +897,13 @@ msgstr "Spider Visits"
 
 #: classes/_localize.php:103
 msgctxt "vue部分"
-msgid "蜘蛛访问量直接体现搜索引擎对URL的嗅觉，蜘蛛访问频率越高，URL被收录索引几率越大。"
+msgid ""
+"蜘蛛访问量直接体现搜索引擎对URL的嗅觉，蜘蛛访问频率越高，URL被收录索引几率越"
+"大。"
 msgstr ""
-"Spider visits directly reflect the search engine's sense of smell of the URL, the higher the frequency of spider visits, the greater the chance that the "
-"URL will be included in the index."
+"Spider visits directly reflect the search engine's sense of smell of the "
+"URL, the higher the frequency of spider visits, the greater the chance that "
+"the URL will be included in the index."
 
 #: classes/_localize.php:104
 msgctxt "vue部分"
@@ -868,7 +913,9 @@ msgstr "Outlinks"
 #: classes/_localize.php:105
 msgctxt "vue部分"
 msgid "出链数指当前页面指向网站其他页面的链接数量。"
-msgstr "Outbound link count refers to the number of links from the current page to other pages on the site."
+msgstr ""
+"Outbound link count refers to the number of links from the current page to "
+"other pages on the site."
 
 #: classes/_localize.php:106
 msgctxt "vue部分"
@@ -878,7 +925,9 @@ msgstr "Inlinks"
 #: classes/_localize.php:107
 msgctxt "vue部分"
 msgid "入链数指网站其他页面指向当前页面的链接数量。"
-msgstr "The number of inbound links refers to the number of links from other pages on the site pointing to the current page."
+msgstr ""
+"The number of inbound links refers to the number of links from other pages "
+"on the site pointing to the current page."
 
 #: classes/_localize.php:108
 msgctxt "vue部分"
@@ -898,7 +947,8 @@ msgstr "Edit"
 #: classes/_localize.php:111
 msgctxt "vue部分"
 msgid "拦截IP段为 %s 的蜘蛛？可通过蜘蛛拦截列表移除。"
-msgstr "Block spiders with IP segment %s? Can be removed via the spider block list."
+msgstr ""
+"Block spiders with IP segment %s? Can be removed via the spider block list."
 
 #: classes/_localize.php:112
 msgctxt "vue部分"
@@ -1073,7 +1123,9 @@ msgstr "Save successful"
 #: classes/_localize.php:146
 msgctxt "vue部分"
 msgid "删除日志操作，将会永久性删除所有蜘蛛历史数据。请谨慎操作！"
-msgstr "The log deletion operation will permanently delete all spider historical data. Please be cautious!"
+msgstr ""
+"The log deletion operation will permanently delete all spider historical "
+"data. Please be cautious!"
 
 #: classes/_localize.php:147
 msgctxt "vue部分"
@@ -1093,7 +1145,9 @@ msgstr "Ignore"
 #: classes/_localize.php:150
 msgctxt "vue部分"
 msgid "您修改的设置尚未保存，确定离开此页面吗？"
-msgstr "The settings you modified have not been saved yet. Are you sure you leave this page?"
+msgstr ""
+"The settings you modified have not been saved yet. Are you sure you leave "
+"this page?"
 
 #: classes/_localize.php:151
 msgctxt "vue部分"
@@ -1178,31 +1232,42 @@ msgstr "Permanent"
 #: classes/_localize.php:167
 msgctxt "vue部分"
 msgid "如历史日志体积过大，可以考虑备份与删除日志。"
-msgstr "If the history log is too large, consider backing up and deleting the log."
+msgstr ""
+"If the history log is too large, consider backing up and deleting the log."
 
 #: classes/_localize.php:168
 msgctxt "vue部分"
 msgid "如蜘蛛日志过大导致数据库访问性能下降，建议选择保留周期为最近30天。"
 msgstr ""
-"If the spider logs are too large resulting in degradation of database access performance, it is recommended to select a retention period of the last 30 "
+"If the spider logs are too large resulting in degradation of database access "
+"performance, it is recommended to select a retention period of the last 30 "
 "days."
 
 #: classes/_localize.php:169
 msgctxt "vue部分"
 msgid "可添加插件未记录的蜘蛛日志，请准确填写蜘蛛名称。"
-msgstr "You can add spider logs that are not recorded by the plug-in. Please fill in the spider name accurately."
+msgstr ""
+"You can add spider logs that are not recorded by the plug-in. Please fill in "
+"the spider name accurately."
 
 #: classes/_localize.php:170
 msgctxt "vue部分"
-msgid "站长可以根据日志记录行数判断蜘蛛日志是否太大，以作出日志备份或者删除操作，降低数据库压力。"
+msgid ""
+"站长可以根据日志记录行数判断蜘蛛日志是否太大，以作出日志备份或者删除操作，降"
+"低数据库压力。"
 msgstr ""
-"The webmaster can judge whether the spider log is too large based on the number of log records to make a log backup or delete operations to reduce "
+"The webmaster can judge whether the spider log is too large based on the "
+"number of log records to make a log backup or delete operations to reduce "
 "database pressure."
 
 #: classes/_localize.php:171
 msgctxt "vue部分"
-msgid "站长可以根据网站的蜘蛛爬取压力，选择蜘蛛日志更新方式，推荐使用默认选项-每小时更新。"
-msgstr "Webmasters can choose the spider log update method based on the website's spider crawling pressure, and recommend default options - hourly."
+msgid ""
+"站长可以根据网站的蜘蛛爬取压力，选择蜘蛛日志更新方式，推荐使用默认选项-每小时"
+"更新。"
+msgstr ""
+"Webmasters can choose the spider log update method based on the website's "
+"spider crawling pressure, and recommend default options - hourly."
 
 #: classes/_localize.php:172
 msgctxt "vue部分"
@@ -1627,18 +1692,6 @@ msgstr "Verification is successful"
 #: classes/_localize.php:256
 msgctxt "vue部分"
 msgid "绑定域名后将不可更改，确认绑定到域名：%s"
-msgstr "After binding the domain name, it cannot be changed. Confirm to bind to the domain name: %s"
-
-#: Plugin Name
-msgid "Spider Analyser"
-msgstr "Spider Analyser"
-
-#: Description
-msgid "Spider Analyser是一款用于跟踪WordPress网站各种搜索引擎蜘蛛爬行日志，并进行详细的蜘蛛爬行数据统计、蜘蛛行为分析、蜘蛛爬取分析及伪蜘蛛拦截等。"
 msgstr ""
-"Spider Analyser is a WordPress plugin for tracking various search engine spider crawl logs, and detailed spider crawl data statistics, spider behavior "
-"analysis, spider crawl analysis and false spider block."
-
-#: Author
-msgid "闪电博"
-msgstr "WBOLT"
+"After binding the domain name, it cannot be changed. Confirm to bind to the "
+"domain name: %s"

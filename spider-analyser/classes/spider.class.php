@@ -18,6 +18,25 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
 
     public static function init()
     {
+        add_action('plugins_loaded', function () {
+            load_plugin_textdomain(WB_SPA_DM, false, plugin_basename(WP_SPIDER_ANALYSER_PATH) . '/languages/');
+        });
+
+        // 插件列表页支持本地化语言展示
+        add_filter('all_plugins', function ($plugins) {
+            if (isset($plugins['spider-analyser/index.php'])) {
+                $plugins_info = [
+                    'Name' => __('Spider Analyser', WB_SPA_DM),
+                    'Title' => __('Spider Analyser', WB_SPA_DM),
+                    'Author' => __('闪电博', WB_SPA_DM),
+                    'AuthorName' => __('闪电博', WB_SPA_DM),
+                    'Description' => __('Spider Analyser是一款用于跟踪WordPress网站各种搜索引擎蜘蛛爬行日志的插件，并进行详细的蜘蛛爬行数据统计、蜘蛛行为分析、蜘蛛爬取分析及伪蜘蛛拦截等。', WB_SPA_DM),
+                    'AuthorURI' => __('https://www.wbolt.com/', WB_SPA_DM)
+                ];
+                $plugins['spider-analyser/index.php'] = array_merge($plugins['spider-analyser/index.php'], $plugins_info);
+            }
+            return $plugins;
+        });
 
         add_action('parse_request', array(__CLASS__, 'parse_request'), 1);
 
@@ -200,12 +219,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
 
         $options = self::cnf();
 
-        $prompt_items = [];
-        if (file_exists(__DIR__ . '/_prompt.php')) {
-            include __DIR__ . '/_prompt.php';
-        }
-        $prompt_var_name = 'prompt_items_' . get_locale();
-        $prompt_items_arr = isset($$prompt_var_name) ? $$prompt_var_name : $prompt_items;
+        $prompt_items = WBP::wb_get_json_fields('prompt.json', __DIR__ . '/json/');
 
         $wb_cnf = array(
             'home_url' => home_url(),
@@ -225,81 +239,12 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
             'wb_spider_auto' => isset($options['auto_deny']) && $options['auto_deny'] == '1' ? '1' : '0',
             'locale' => get_locale(),
             'actpanel_visible' => in_array(get_locale(), ['zh_CN', 'zh_TW'], true),
-            'prompt' => $prompt_items_arr,
+            'prompt' => $prompt_items
         );
 
 
-
         $inline_script = 'var wbp_js_cnf=' . wp_json_encode($wb_cnf) . ';' . "\n";
-
         wp_add_inline_script('wbs-inline-js', $inline_script, 'before');
-
-        // add_filter('style_loader_tag', function ($tag, $handle, $href, $media) {
-        //     if (!preg_match('#^vue-#', $media)) {
-        //         return $tag;
-        //     }
-
-        //     $media = htmlspecialchars_decode($media);
-        //     $r = [];
-        //     parse_str(str_replace('vue-', '', $media), $r);
-        //     $rel = '';
-        //     $attr = [];
-        //     if ($r && is_array($r)) {
-        //         if (isset($r['rel'])) {
-        //             $rel = $r['rel'];
-        //             unset($r['rel']);
-        //         }
-        //         foreach ($r as $attr_k => $attr_v) {
-        //             $attr[] = sprintf('%s="%s"', $attr_k, esc_attr($attr_v));
-        //         }
-        //     }
-
-        //     $tag = sprintf(
-        //         '<link href="%s" rel="%s" %s/>' . "\n",
-        //         $href,
-        //         $rel,
-        //         implode(" ", $attr)
-        //     );
-        //     return $tag;
-        // }, 10, 4);
-        // add_filter('script_loader_tag', function ($tag, $handle, $src) {
-        //     if (!preg_match('#-vue-js-#', $handle)) {
-        //         return $tag;
-        //     }
-        //     $parts = explode('?', $src, 2);
-        //     $src = $parts[0];
-        //     $type = '';
-        //     $attr = '';
-        //     if (isset($parts[1])) {
-        //         $r = [];
-        //         parse_str(htmlspecialchars_decode($parts[1]), $r);
-        //         //print_r($r);
-        //         if ($r) {
-        //             if (isset($r['type'])) {
-        //                 $type = sprintf(' type="%s"', esc_attr($r['type']));
-        //                 unset($r['type']);
-        //             }
-        //             $attr_txt = '';
-        //             if (isset($r['attr'])) {
-        //                 $attr_txt = $r['attr'];
-        //                 unset($r['attr']);
-        //             }
-        //             foreach ($r as $k => $v) {
-        //                 $attr .= sprintf(' %s="%s"', $k, esc_attr($v));
-        //             }
-        //             if ($attr_txt) {
-        //                 $attr .= sprintf(' %s', esc_attr($attr_txt));
-        //             }
-        //         }
-        //     }
-        //     //print_r([$handle,$src]);
-
-        //     $tag = sprintf('<script%s src="%s"%s id="%s-js"></script>' . "\n", $type, $src, $attr, $handle);
-        //     return $tag;
-        // }, 10, 3);
-
-        // self::vue_assets();
-
         echo WB_Vite::vite('src/main.js', WP_SPIDER_ANALYSER_PATH . '/assets/wbp/', WP_SPIDER_ANALYSER_URL . '/assets/wbp/');
     }
 
@@ -852,7 +797,8 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
             'reset',
             'options',
             'update_setting',
-            'get_localize'
+            'get_localize',
+            'get_comparison'
         ];
         if (!in_array($op, $arrow)) {
             return;
@@ -1354,6 +1300,16 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
                 ];
 
                 $ret['data'] = self::localize_ajax_handle();
+
+                self::ajax_resp($ret);
+                break;
+
+            case 'get_comparison':
+                $ret = [
+                    'code' => 0,
+                    'desc' => 'success',
+                    'data' => WBP::wb_get_json_fields('comparison.json', __DIR__ . '/json/')
+                ];
 
                 self::ajax_resp($ret);
                 break;
@@ -3304,7 +3260,7 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
             'timeout' => 30,
             'sslverify' => false,
             'headers' => array('referer' => home_url()),
-            'body' => ['udg' => 1, 'logo' => 1]
+            'body' => ['udg' => 1, 'logo' => 1, 'locale' => get_locale()]
         ];
         $http = wp_remote_get($api, $param);
         do {
@@ -3343,10 +3299,11 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
         if ($data !== null) {
             return $data;
         }
+        $locale = get_locale();
 
         $cache = [];
         do {
-            $file = WP_SPIDER_ANALYSER_PATH . '/#info/spider_info.php';
+            $file = WP_SPIDER_ANALYSER_PATH . '/#info/spider_info_' . $locale . '.php';
             if (file_exists($file)) {
                 $cache = include $file;
                 if (!empty($cache) && is_array($cache)) {
@@ -3381,8 +3338,9 @@ class WP_Spider_Analyser extends WP_Spider_Analyser_Base
             mkdir(WP_SPIDER_ANALYSER_PATH . '/#info/', 0755);
         }
 
+        $locale = get_locale();
         $content = '<' . '?php' . "\n" . 'return ' . var_export($data, true) . ';';
-        file_put_contents(WP_SPIDER_ANALYSER_PATH . '/#info/spider_info.php', $content);
+        file_put_contents(WP_SPIDER_ANALYSER_PATH . '/#info/spider_info_' . $locale . '.php', $content);
     }
 
     public static function db_ver()

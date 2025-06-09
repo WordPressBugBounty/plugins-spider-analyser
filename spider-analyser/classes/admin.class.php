@@ -147,6 +147,7 @@ class WP_Spider_Analyser_Admin extends WP_Spider_Analyser_Base
         return $links;
     }
 
+
     public static function  array_sanitize_text_field($value)
     {
         if (is_array($value)) {

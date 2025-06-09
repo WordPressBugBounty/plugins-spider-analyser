@@ -9,6 +9,8 @@
 class WBP
 {
 
+  public static $version = '1.1.0';
+
   public static function init() {}
 
   // 计算本地化key
@@ -92,5 +94,29 @@ class WBP
       '_transient_timeout_' . $slug . '_%'
     );
     $wpdb->query($query);
+  }
+
+  /**
+   * 获取json配置文件
+   *
+   * @param string $file_name
+   * @param string $json_file_dir
+   * @return array
+   */
+  public static function wb_get_json_fields($file_name, $json_file_dir = 'json/')
+  {
+    $locale = get_locale();
+    $suport_locales = ['zh_TW', 'en_US']; // 支持的本地语言
+    $default_file = $json_file_dir . 'zh_CN/' . $file_name;
+
+    $cnf_fields_path = in_array($locale, $suport_locales) ? $json_file_dir . $locale . '/' . $file_name : $default_file;
+
+    $cnf_fields_file = '{}';
+    if (file_exists($cnf_fields_path)) {
+      $cnf_fields_file = file_get_contents($cnf_fields_path) ?? '{}';
+    } elseif (file_exists($default_file)) {
+      $cnf_fields_file = file_get_contents($default_file) ?? '{}';
+    }
+    return json_decode($cnf_fields_file, true);
   }
 }
